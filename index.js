@@ -144,21 +144,13 @@ function findBooks(player, books) {
     }
 }
 
-function test() {
-    console.log("Dealing cards...")
-    deal(stock, 0, player0);
-    deal(stock, 13-1, player0);
-    deal(stock, 38-2, player0);
-    deal(stock, 51-3, player0);
-    deal(stock, 2, player0);
-    console.log("\nYour hand:")
-    console.log(player0);
-    console.log("\nFinding books...")
-    findBooks(player0, books0);
-    console.log("\nYour hand:");
-    console.log(player0);
-    console.log("\nYour books:")
-    console.log(books0);
+// For now, I'll proceed with 3 players only, and player0 is always the dealer
+for (i = 0; i < 7; i++) {
+    dealRand(stock, player0);
+    dealRand(stock, player1);
+    dealRand(stock, player2);
 }
 
-test();
+console.log(player0);
+console.log(player1);
+console.log(player2);
