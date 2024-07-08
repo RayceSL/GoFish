@@ -6,8 +6,8 @@
 */
 
 let stock = [
-    {"name": "Red Joker", "rank": "13", "suit": "4"},
-    {"name": "Black Joker", "rank": "13", "suit": "4"},
+    // {"name": "Red Joker", "rank": "13", "suit": "4"},
+    // {"name": "Black Joker", "rank": "13", "suit": "4"},
 
     {"name": "A♥", "rank": "0", "suit": "0"},
     {"name": "2♥", "rank": "1", "suit": "0"},
@@ -73,6 +73,13 @@ let player3 = [];
 let player4 = [];
 let playerNames = ["Y/N", "Abby", "Bob", "Clara", "Dolton"];
 
+let books0 = [];
+let books1 = [];
+let books2 = [];
+let books3 = [];
+let books4 = [];
+let bookNames = ["Your books", "Abby's books", "Bob's books", "Clara's books", "Dolton's books"];
+
 // Swaps two cards' positions in an index
 // Took this guy's code: https://stackoverflow.com/a/2440720/25562183
 function swapCard(array, indexA, indexB) {
@@ -81,10 +88,77 @@ function swapCard(array, indexA, indexB) {
     array[indexB] = tmp;
 }
 
+// Deals a specific card from one player to another
+function deal(fromPlayer, fromIndex, toPlayer) {
+    swapCard(fromPlayer, fromIndex, 0);
+    toPlayer.unshift(fromPlayer[0]);
+    fromPlayer.shift();
+}
+
 // Deals a random card from one player to another
-function deal(fromPlayer, toPlayer) {
+function dealRand(fromPlayer, toPlayer) {
     let randIndex = (Math.floor(Math.random() * fromPlayer.length));
     swapCard(fromPlayer, randIndex, 0);
     toPlayer.unshift(fromPlayer[0]);
     fromPlayer.shift();
 }
+
+// Finds books in a player's hand
+// Only works if a player has 4 or more cards!!
+// Input the player and where they should put their books
+function findBooks(player, books) {
+    player.sort((a,b) => a.rank - b.rank);
+    let i = 0
+    while(i < 51 && player.length >= 4) {
+        let total = 0;
+        if (player[0].rank == player[1].rank) {
+            total++;
+            if (player[0].rank == player[2].rank) {
+                total++;
+                if (player[0].rank == player[3].rank) {
+                    total++;
+                    if (total == 3) {
+                        deal(player, 0, books);
+                        deal(player, 0, books);
+                        deal(player, 0, books);
+                        deal(player, 0, books);
+                    }
+                } else {
+                    player.push(player[0]);
+                    player.shift();
+                    total = 0;
+                    i++;
+                }
+            } else {
+                player.push(player[0]);
+                player.shift();
+                total = 0;
+                i++;
+            }
+        } else {
+            player.push(player[0]);
+            player.shift();
+            total = 0;
+            i++;
+        }
+    }
+}
+
+function test() {
+    console.log("Dealing cards...")
+    deal(stock, 0, player0);
+    deal(stock, 13-1, player0);
+    deal(stock, 38-2, player0);
+    deal(stock, 51-3, player0);
+    deal(stock, 2, player0);
+    console.log("\nYour hand:")
+    console.log(player0);
+    console.log("\nFinding books...")
+    findBooks(player0, books0);
+    console.log("\nYour hand:");
+    console.log(player0);
+    console.log("\nYour books:")
+    console.log(books0);
+}
+
+test();
