@@ -65,7 +65,8 @@ let player1 = [];
 let player2 = [];
 let player3 = [];
 let player4 = [];
-let playerNames = ["Y/N", "Abby", "Bob", "Clara", "Dolton"];
+// let currentPlayer = ["Abby", "Bob", "Clara", "Dolton", "Y/N"];
+let currentPlayer = ["Abby", "Bob", "Y/N"];
 
 let books0 = [];
 let books1 = [];
@@ -138,28 +139,25 @@ function findBooks(player, books) {
     }
 }
 
-function findMatches(fromPlayer, fromIndex, toPlayer) {
-    for (i = 0; i < fromPlayer.length; i++) {
-        if (toPlayer[fromIndex].rank == fromPlayer[0].rank) {
-            // deal to THE END of toPlayer!!
-            // Push the matching card, which is at index 0, from the fromPlayer to the toPlayer
-            // That way, the card we're comparing from doesn't change its index
-            toPlayer.push(fromPlayer[0]);
-            fromPlayer.shift(); // removes the card from fromPlayer's hand
-        } else {
-            fromPlayer.push(fromPlayer[0]); // If the matching card isn't found at index 0,
-            fromPlayer.shift();             // Move it to the back and keep checking
-        }
-    } 
-}
+/*
+███████ ████████  █████  ██████  ████████      ██████   █████  ███    ███ ███████ 
+██         ██    ██   ██ ██   ██    ██        ██       ██   ██ ████  ████ ██      
+███████    ██    ███████ ██████     ██        ██   ███ ███████ ██ ████ ██ █████   
+     ██    ██    ██   ██ ██   ██    ██        ██    ██ ██   ██ ██  ██  ██ ██      
+███████    ██    ██   ██ ██   ██    ██         ██████  ██   ██ ██      ██ ███████ 
+*/
 
 // For now, I'll proceed with 3 players only, and player0 is always the dealer
 // This deals 7 cards to each player
-for (i = 0; i < 7; i++) {
+for (i = 0; i < 14; i++) {
     dealRand(stock, player0);
     dealRand(stock, player1);
     dealRand(stock, player2);
 }
+
+console.log(`\n${currentPlayer[0]}'s hand: ${player1.length} cards.`);
+console.log(`${currentPlayer[1]}'s hand: ${player2.length} cards.`);
+console.log(`${currentPlayer[2]}'s hand: ${player0.length} cards.\n`);
 
 // First turn should be player1 "Abby", then player2 "Bob", then player0 "Y/N"
 /*
@@ -176,29 +174,55 @@ Stupid bot turn structure:
 5. Pass turn to next player
 */
 
-console.log(`\n${playerNames[0]}'s hand: ${player0.length} cards.`);
-console.log(`${playerNames[1]}'s hand: ${player1.length} cards.`);
-console.log(`${playerNames[2]}'s hand: ${player2.length} cards.`);
+let catches = 0;
 
-// Choose random rank
-let randRank = (Math.floor(Math.random() * player1.length));
+function player1Turn() {
+    catches = 0;
+    // Choose random rank from own hand
+    let randIndex = (Math.floor(Math.random() * player1.length));
 
-// Choose random player
-let otherPlayers = [
-    {"name": "Y/N", "handName": player0}, 
-    {"name": "Bob", "handName": player2}
-];
-let randPlayer = (Math.floor(Math.random() * otherPlayers.length));
-let randHandName = otherPlayers[randPlayer].handName;
+    let otherPlayers = [
+        {"playerName": "Y/N", "playerArray": player0}, 
+        {"playerName": "Bob", "playerArray": player2}
+    ];
 
-// Ask for cards
-console.log(`\nAbby asks ${otherPlayers[randPlayer].name} for all their ${player1[randRank].rankPlural}.`);
+    // Choose random player to take from
+    let randPlayerObject = (Math.floor(Math.random() * otherPlayers.length));
+    // Splitting the randPlayerObject like this is uneccessary, but it makes it easier to read
+    let randPlayerArray = otherPlayers[randPlayerObject].playerArray;
+    let randPlayerName = otherPlayers[randPlayerObject].playerName;
 
-// Check for matching ranks
-// Find ALL matching cards... there could only ever be three others found
-findMatches(randHandName, randRank, player1);
-console.log(`${otherPlayers[randPlayer].name} searches their hand, and may or may not have given Abby any cards.`);
+    // Ask for cards
+    console.log(`${currentPlayer[0]} asks ${randPlayerName} for all their ${player1[randIndex].rankPlural}.`);
 
-console.log(`\n${playerNames[0]}'s hand: ${player0.length} cards.`);
-console.log(`${playerNames[1]}'s hand: ${player1.length} cards.`);
-console.log(`${playerNames[2]}'s hand: ${player2.length} cards.`);
+    // START MATCHING FUNCTION
+    for (i = 0; i < randPlayerArray.length; i++) {
+        if (player1[randIndex].rank == randPlayerArray[0].rank) {
+            catches++;
+            player1.push(randPlayerArray[0]); // So the reference card doesn't change its index
+            randPlayerArray.shift(); // removes the card from fromPlayer's hand
+            //               ↓ Taking from                  ↓ Card just taken                   ↓ current player
+            console.log(`${randPlayerName} gives up the ${player1[player1.length-1].name} to ${currentPlayer[0]}.`);
+        } else {
+            // If the matching card isn't found at index 0, move it to the back and keep checking
+            randPlayerArray.push(randPlayerArray[0]);
+            randPlayerArray.shift();
+            if (i == randPlayerArray.length-1 && catches < 1) {
+                console.log(`${randPlayerName} tells ${currentPlayer[0]} to go fish!\n`);
+                catches = 0;
+                console.log(`\n${currentPlayer[0]}'s hand: ${player1.length} cards.`);
+                console.log(`${currentPlayer[1]}'s hand: ${player2.length} cards.`);
+                console.log(`${currentPlayer[2]}'s hand: ${player0.length} cards.\n`);
+            }
+        }
+    }
+    if (catches >= 1) {
+        console.log(`${currentPlayer[0]} gets to go again!\n`);
+        catches = 0;
+        player1Turn();
+    }
+    // END MATCHING FUNCTION
+}
+
+player1Turn();
+
