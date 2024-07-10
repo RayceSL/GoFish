@@ -160,6 +160,24 @@ function findBooks() {
     }
 }
 
+// takeMatches(profiles[randProfileIndex], profiles[0]);
+function takeMatches(fromPlayer, toPlayer) {
+    let i = 0;
+    while (i < 51 && fromPlayer.hand.length >= 1) {
+        if (toPlayer.hand[0].value == fromPlayer.hand[0].value) {
+            deal(0, fromPlayer.hand, toPlayer.hand);
+            console.log(`${fromPlayer.name} gave ${toPlayer.name} the ${toPlayer.hand[(toPlayer.hand.length)-1].name}.`);
+        } else {
+            advanceHand(fromPlayer.hand);
+            i++;
+            // console.log("This wasn't a match");
+        }
+        if (i == 51) {
+            console.log(`${fromPlayer.name} couldn't find any (more) matches`);
+        }
+    }
+}
+
 // Debugging purposes
 // Deals a book and some random cards to the first player
 /* 
@@ -210,16 +228,22 @@ function botTurn() {
     profiles[0].hand.sort((a,b) => a.value - b.value);
     findBooks();
 
-    // TASK II: Choose a random card, bring it to the top
-    console.log(profiles[0].hand[0].name);
-    swapCard(profiles[0].hand, 0, (Math.floor(Math.random() * profiles[0].hand.length)));
-    console.log(profiles[0].hand[0].name);
-
-    // TASK III: Choose a random player
+    // TASK II: Choose a random player
     var randProfileIndex = Math.floor(Math.random() * (profiles.length - 1) + 1);
-    console.log(`Player chooses to take from: ${profiles[randProfileIndex].name}.`);
+    console.log(`${profiles[0].name} chooses to take from: ${profiles[randProfileIndex].name}.`);
+
+    // TASK III: Choose a random card, bring it to the top
+    swapCard(profiles[0].hand, 0, (Math.floor(Math.random() * profiles[0].hand.length)));
+    console.log(`${profiles[0].name} wants ${profiles[0].hand[0].value}s.`);
 
     // TASK IV: Take all matching cards from the player
+    console.log(`${profiles[randProfileIndex].name} looks through their cards...`);
+    takeMatches(profiles[randProfileIndex], profiles[0]);
+
+    // TASK V: Check for books
+    profiles[0].hand.sort((a,b) => a.value - b.value);
+    findBooks();
+
 }
 
 startGame();
