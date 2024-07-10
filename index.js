@@ -121,15 +121,15 @@ function findBooks() {
 
         if (profiles[0].hand[0].value == profiles[0].hand[1].value) {
             matchesFound++;
-            console.log(`Matches found: ${matchesFound}`);
+            //console.log(`Matches found: ${matchesFound}`);
 
             if (profiles[0].hand[0].value == profiles[0].hand[2].value) {
                 matchesFound++;
-                console.log(`Matches found: ${matchesFound}`);
+                //console.log(`Matches found: ${matchesFound}`);
 
                 if (profiles[0].hand[0].value == profiles[0].hand[3].value) {
                     matchesFound++;
-                    console.log(`Matches found: ${matchesFound}`);
+                    //console.log(`Matches found: ${matchesFound}`);
 
                     if (matchesFound == 3) {
                         console.log("Book found!");
@@ -200,5 +200,27 @@ function startGame() {
     }
     advanceProfiles();
     console.log(`The play is passed to ${profiles[0].name}.`);
+    botTurn();
 }
+
+function botTurn() {
+    console.log(`Current player: ${profiles[0].name}.`);
+
+    // TASK I: Check for books
+    profiles[0].hand.sort((a,b) => a.value - b.value);
+    findBooks();
+
+    // TASK II: Choose a random card, bring it to the top
+    console.log(profiles[0].hand[0].name);
+    swapCard(profiles[0].hand, 0, (Math.floor(Math.random() * profiles[0].hand.length)));
+    console.log(profiles[0].hand[0].name);
+
+    // TASK III: Choose a random player
+    var randProfileIndex = Math.floor(Math.random() * (profiles.length - 1) + 1);
+    console.log(`Player chooses to take from: ${profiles[randProfileIndex].name}.`);
+
+    // TASK IV: Take all matching cards from the player
+}
+
+startGame();
 
