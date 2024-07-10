@@ -1,63 +1,67 @@
+// I DO NOT KNOW WHY, BUT PLAYER'S HANDS
+// MUST BE SORTED BEFORE THE findBooks()
+// FUNCTION IS CALLED
+/**/
 // The cards that will be used in the game
 // Aces are high, even though "Go Fish" counts the number of books a player has
 // as their score, I'm just trusting Bicycle on this one
 // The two jokers are also removed
 var stock = [
-    {"name": "2♥",     "value": "2"    },
-    {"name": "3♥",     "value": "3"    },
-    {"name": "4♥",     "value": "4"    },
-    {"name": "5♥",     "value": "5"    },
-    {"name": "6♥",     "value": "6"    },
-    {"name": "7♥",     "value": "7"    },
-    {"name": "8♥",     "value": "8"    },
-    {"name": "9♥",     "value": "9"    },
-    {"name": "10♥",    "value": "10"   },
-    {"name": "J♥",     "value": "11"   },
-    {"name": "Q♥",     "value": "12"   },
-    {"name": "K♥",     "value": "13"   },
-    {"name": "A♥",     "value": "14"   },
+    {"name": "2♥",     "value": "2"    }, // index: 0
+    {"name": "3♥",     "value": "3"    }, // index: 1
+    {"name": "4♥",     "value": "4"    }, // index: 2
+    {"name": "5♥",     "value": "5"    }, // index: 3
+    {"name": "6♥",     "value": "6"    }, // index: 4
+    {"name": "7♥",     "value": "7"    }, // index: 5
+    {"name": "8♥",     "value": "8"    }, // index: 6
+    {"name": "9♥",     "value": "9"    }, // index: 7
+    {"name": "10♥",    "value": "10"   }, // index: 8
+    {"name": "J♥",     "value": "11"   }, // index: 9
+    {"name": "Q♥",     "value": "12"   }, // index: 10
+    {"name": "K♥",     "value": "13"   }, // index: 11
+    {"name": "A♥",     "value": "14"   }, // index: 12
 
-    {"name": "2♣",     "value": "2"    },
-    {"name": "3♣",     "value": "3"    },
-    {"name": "4♣",     "value": "4"    },
-    {"name": "5♣",     "value": "5"    },
-    {"name": "6♣",     "value": "6"    },
-    {"name": "7♣",     "value": "7"    },
-    {"name": "8♣",     "value": "8"    },
-    {"name": "9♣",     "value": "9"    },
-    {"name": "10♣",    "value": "10"   },
-    {"name": "J♣",     "value": "11"   },
-    {"name": "Q♣",     "value": "12"   },
-    {"name": "K♣",     "value": "13"   },
-    {"name": "A♣",     "value": "14"   },
+    {"name": "2♣",     "value": "2"    }, // index: 13
+    {"name": "3♣",     "value": "3"    }, // index: 14
+    {"name": "4♣",     "value": "4"    }, // index: 15
+    {"name": "5♣",     "value": "5"    }, // index: 16
+    {"name": "6♣",     "value": "6"    }, // index: 17
+    {"name": "7♣",     "value": "7"    }, // index: 18
+    {"name": "8♣",     "value": "8"    }, // index: 19
+    {"name": "9♣",     "value": "9"    }, // index: 20
+    {"name": "10♣",    "value": "10"   }, // index: 21
+    {"name": "J♣",     "value": "11"   }, // index: 22
+    {"name": "Q♣",     "value": "12"   }, // index: 23
+    {"name": "K♣",     "value": "13"   }, // index: 24
+    {"name": "A♣",     "value": "14"   }, // index: 25
 
-    {"name": "2♦",     "value": "2"    },
-    {"name": "3♦",     "value": "3"    },
-    {"name": "4♦",     "value": "4"    },
-    {"name": "5♦",     "value": "5"    },
-    {"name": "6♦",     "value": "6"    },
-    {"name": "7♦",     "value": "7"    },
-    {"name": "8♦",     "value": "8"    },
-    {"name": "9♦",     "value": "9"    },
-    {"name": "10♦",    "value": "10"   },
-    {"name": "J♦",     "value": "11"   },
-    {"name": "Q♦",     "value": "12"   },
-    {"name": "K♦",     "value": "13"   },
-    {"name": "A♦",     "value": "14"   },
+    {"name": "2♦",     "value": "2"    }, // index: 26
+    {"name": "3♦",     "value": "3"    }, // index: 27
+    {"name": "4♦",     "value": "4"    }, // index: 28
+    {"name": "5♦",     "value": "5"    }, // index: 29
+    {"name": "6♦",     "value": "6"    }, // index: 30
+    {"name": "7♦",     "value": "7"    }, // index: 31
+    {"name": "8♦",     "value": "8"    }, // index: 32
+    {"name": "9♦",     "value": "9"    }, // index: 33
+    {"name": "10♦",    "value": "10"   }, // index: 34
+    {"name": "J♦",     "value": "11"   }, // index: 35
+    {"name": "Q♦",     "value": "12"   }, // index: 36
+    {"name": "K♦",     "value": "13"   }, // index: 37
+    {"name": "A♦",     "value": "14"   }, // index: 38
 
-    {"name": "2♠",     "value": "2"    },
-    {"name": "3♠",     "value": "3"    },
-    {"name": "4♠",     "value": "4"    },
-    {"name": "5♠",     "value": "5"    },
-    {"name": "6♠",     "value": "6"    },
-    {"name": "7♠",     "value": "7"    },
-    {"name": "8♠",     "value": "8"    },
-    {"name": "9♠",     "value": "9"    },
-    {"name": "10♠",    "value": "10"   },
-    {"name": "J♠",     "value": "11"   },
-    {"name": "Q♠",     "value": "12"   },
-    {"name": "K♠",     "value": "13"   },
-    {"name": "A♠",     "value": "14"   }
+    {"name": "2♠",     "value": "2"    }, // index: 39
+    {"name": "3♠",     "value": "3"    }, // index: 40
+    {"name": "4♠",     "value": "4"    }, // index: 41
+    {"name": "5♠",     "value": "5"    }, // index: 42
+    {"name": "6♠",     "value": "6"    }, // index: 43
+    {"name": "7♠",     "value": "7"    }, // index: 44
+    {"name": "8♠",     "value": "8"    }, // index: 45
+    {"name": "9♠",     "value": "9"    }, // index: 46
+    {"name": "10♠",    "value": "10"   }, // index: 47
+    {"name": "J♠",     "value": "11"   }, // index: 48
+    {"name": "Q♠",     "value": "12"   }, // index: 49
+    {"name": "K♠",     "value": "13"   }, // index: 50
+    {"name": "A♠",     "value": "14"   }  // index: 51
 ];
 
 var player0 = [];
@@ -65,10 +69,10 @@ var player1 = [];
 var player2 = [];
 
 var profiles = [
-    {"name": "Rayce",   "hand": player0 },
-    {"name": "Abby",    "hand": player1 },
-    {"name": "Bob",     "hand": player2 }
-]
+    {"name": "Rayce",   "hand": player0,    "score": 0},
+    {"name": "Abby",    "hand": player1,    "score": 0},
+    {"name": "Bob",     "hand": player2,    "score": 0}
+];
 
 var startingCardCount = 7;
 
@@ -101,6 +105,89 @@ function advanceProfiles() {
     profiles.push(profiles[0]);
     profiles.shift();
 }
+
+// remember to format as profiles[x].hand
+function advanceHand(player) {
+    player.push(player[0]);
+    player.shift();
+}
+
+// locates fours-of-a-kind (called "books") in the current player's hand,
+// Adds a point to the player's score
+function findBooks() {
+    profiles[0].hand.sort((a,b) => a.value - b.value);
+    var matchesFound = 0;
+    while (i < 51 && profiles[0].hand.length >= 4) {
+
+        if (profiles[0].hand[0].value == profiles[0].hand[1].value) {
+            matchesFound++;
+            console.log(`Matches found: ${matchesFound}`);
+
+            if (profiles[0].hand[0].value == profiles[0].hand[2].value) {
+                matchesFound++;
+                console.log(`Matches found: ${matchesFound}`);
+
+                if (profiles[0].hand[0].value == profiles[0].hand[3].value) {
+                    matchesFound++;
+                    console.log(`Matches found: ${matchesFound}`);
+
+                    if (matchesFound == 3) {
+                        console.log("Book found!");
+                        profiles[0].score++;
+                        console.log(`Score: ${profiles[0].score}`);
+                        profiles[0].hand.shift();
+                        profiles[0].hand.shift();
+                        profiles[0].hand.shift();
+                        profiles[0].hand.shift();
+                        matchesFound = 0;
+                        // findBooks();
+                    }
+                } else {
+                    matchesFound = 0;
+                    advanceHand(profiles[0].hand);
+                    i++;
+                }
+            } else {
+                matchesFound = 0;
+                advanceHand(profiles[0].hand);
+                i++;
+            }
+        } else {
+            matchesFound = 0;
+            advanceHand(profiles[0].hand);
+            i++;
+        }
+    }
+}
+
+// Debugging purposes
+// Deals a book and some random cards to the first player
+/* 
+function win() {
+    var randomCardsAdded = 40;
+    console.log(`Dealing cards to ${profiles[0].name}...`);
+    
+    for (suit = 1; suit <= 4; suit++) {
+        // Each iteration, the array gets smaller---this compensates for that
+        //                    ____/\____
+        //                   /          \
+        deal((13 * suit - 1) - (suit - 1), stock, profiles[0].hand);
+    }
+
+    for (i = 0; i < randomCardsAdded; i++) {
+        dealRand(stock, profiles[0].hand);
+    }
+    console.log(`Dealt ${profiles[0].hand.length} cards to ${profiles[0].name}.`);
+    console.log("Their hand:");
+    profiles[0].hand.sort((a,b) => a.value - b.value);
+    console.log(profiles[0].hand);
+    console.log(`${profiles[0].name} looks for books...`);
+    findBooks();
+    console.log(`Found ${profiles[0].score} books!`);
+    console.log("Their hand:");
+    console.log(profiles[0].hand);
+}
+ */
 
 // TASK I: Deals seven cards to each player
 function startGame() {
