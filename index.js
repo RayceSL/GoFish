@@ -102,12 +102,16 @@ function advanceProfiles() {
     profiles.shift();
 }
 
-// TASK I: Deal seven cards to each player
+// TASK I: Deals seven cards to each player
 function startGame() {
     console.log("%cStarted game!", "color:green");
+    console.log(`${profiles[0].name} is the dealer.\nThey deal ${startingCardCount} cards to everyone...`);
     for (i = 1; i <= startingCardCount * profiles.length; i++) {
+        // console.log(`Dealing to: ${profiles[0].name}`);
         dealRand(stock, profiles[0].hand);
         advanceProfiles();
     }
+    advanceProfiles();
+    console.log(`The play is passed to ${profiles[0].name}.`);
 }
 
