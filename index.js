@@ -70,6 +70,8 @@ var profiles = [
     {"name": "Bob",     "hand": player2 }
 ]
 
+var startingCardCount = 7;
+
 // Swaps two cards' positions in an index
 // Took this guy's code: https://stackoverflow.com/a/2440720/25562183
 function swapCard(array, indexA, indexB) {
@@ -78,21 +80,34 @@ function swapCard(array, indexA, indexB) {
     array[indexB] = tmp;
 }
 
-// Deals a random card from one player to another at the TOP of their hand
-// (start of their array)
-function deal(fromPlayer, toPlayer) {
+// Deals a random card from one player to another to the BOTTOM of their hand
+// (end of their array)
+function dealRand(fromPlayer, toPlayer) {
     let randIndex = (Math.floor(Math.random() * fromPlayer.length));
     swapCard(fromPlayer, randIndex, 0);
-    toPlayer.unshift(fromPlayer[0]);
+    toPlayer.push(fromPlayer[0]);
     fromPlayer.shift();
 }
 
-// Deals a specific card from one player to another at the BOTTOM of their hand
+// Deals a specific card from one player to another to the BOTTOM of their hand
 // (end of their array)
-function dealBottom(index, fromPlayer, toPlayer) {
+function deal(index, fromPlayer, toPlayer) {
     swapCard(fromPlayer, index, 0);
     toPlayer.push(fromPlayer[0]);
     fromPlayer.shift();
 }
 
+function advanceProfiles() {
+    profiles.push(profiles[0]);
+    profiles.shift();
+}
+
+// TASK I: Deal seven cards to each player
+function startGame() {
+    console.log("%cStarted game!", "color:green");
+    for (i = 1; i <= startingCardCount * profiles.length; i++) {
+        dealRand(stock, profiles[0].hand);
+        advanceProfiles();
+    }
+}
 
