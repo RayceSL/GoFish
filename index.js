@@ -76,6 +76,8 @@ var profiles = [
 
 var startingCardCount = 7;
 
+var getSecondTurn = false;
+
 // Swaps two cards' positions in an index
 // Took this guy's code: https://stackoverflow.com/a/2440720/25562183
 function swapCard(array, indexA, indexB) {
@@ -167,6 +169,7 @@ function takeMatches(fromPlayer, toPlayer) {
         if (toPlayer.hand[0].value == fromPlayer.hand[0].value) {
             deal(0, fromPlayer.hand, toPlayer.hand);
             console.log(`${fromPlayer.name} gave ${toPlayer.name} the ${toPlayer.hand[(toPlayer.hand.length)-1].name}.`);
+            getSecondTurn = true;
         } else {
             advanceHand(fromPlayer.hand);
             i++;
@@ -221,6 +224,10 @@ function startGame() {
     botTurn();
 }
 
+function nextTurn() {
+    console.log("NEXT TURN");
+}
+
 function botTurn() {
     console.log(`Current player: ${profiles[0].name}.`);
 
@@ -239,11 +246,20 @@ function botTurn() {
     // TASK IV: Take all matching cards from the player
     console.log(`${profiles[randProfileIndex].name} looks through their cards...`);
     takeMatches(profiles[randProfileIndex], profiles[0]);
-
-    // TASK V: Check for books
-    profiles[0].hand.sort((a,b) => a.value - b.value);
-    findBooks();
-
+    
+    // TASK V: If player got at least 1 match, they get to go again
+    if (getSecondTurn == true) {
+        getSecondTurn = false;
+        botTurn();
+    } else {
+        // GO FISH PROTOCOL
+        console.log(`${profiles[0].name} goes fishing!`);
+        dealRand(stock, profiles[0].hand);
+        // TASK OMEGA: Check for books
+        profiles[0].hand.sort((a,b) => a.value - b.value);
+        findBooks();
+        nextTurn();
+    }
 }
 
 startGame();
