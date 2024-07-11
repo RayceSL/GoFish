@@ -78,6 +78,8 @@ var startingCardCount = 7;
 
 var getSecondTurn = false;
 
+var turns = 0;
+
 // Swaps two cards' positions in an index
 // Took this guy's code: https://stackoverflow.com/a/2440720/25562183
 function swapCard(array, indexA, indexB) {
@@ -119,6 +121,7 @@ function advanceHand(player) {
 function findBooks() {
     profiles[0].hand.sort((a,b) => a.value - b.value);
     var matchesFound = 0;
+    let i = 0;
     while (i < 51 && profiles[0].hand.length >= 4) {
 
         if (profiles[0].hand[0].value == profiles[0].hand[1].value) {
@@ -142,7 +145,6 @@ function findBooks() {
                         profiles[0].hand.shift();
                         profiles[0].hand.shift();
                         matchesFound = 0;
-                        // findBooks();
                     }
                 } else {
                     matchesFound = 0;
@@ -173,10 +175,6 @@ function takeMatches(fromPlayer, toPlayer) {
         } else {
             advanceHand(fromPlayer.hand);
             i++;
-            // console.log("This wasn't a match");
-        }
-        if (i == 51) {
-            console.log(`${fromPlayer.name} couldn't find any (more) matches`);
         }
     }
 }
@@ -220,26 +218,66 @@ function startGame() {
         advanceProfiles();
     }
     advanceProfiles();
-    console.log(`The play is passed to ${profiles[0].name}.`);
+    console.log(`The play is passed to ${profiles[0].name}.\n`);
     botTurn();
 }
 
 function nextTurn() {
-    console.log("NEXT TURN");
+    advanceProfiles();
+    console.log(`${profiles[0].name}'s hand: ${profiles[0].hand.length}`);
+    console.log(`${profiles[1].name}'s hand: ${profiles[1].hand.length}`);
+    console.log(`${profiles[2].name}'s hand: ${profiles[2].hand.length}\n`);
+    console.log(`Stock: ${stock.length}\n`);
+    
+    console.log(`Turn: ${turns}`);
+    console.log(`Current player: ${profiles[0].name}.`);
+    turns++;
+    botTurn();
 }
 
 function botTurn() {
-    console.log(`Current player: ${profiles[0].name}.`);
-
+    // TASK 0: If hand is empty, go fish, then proceed
+    if (profiles[0].hand.length < 0) {
+        console.log(`${profiles[0].name} must start by going fishing...`);
+        if (stock.length < 1) {
+            console.log("The stock is empty");
+            return;
+        } else {
+            dealRand(stock, profiles[0].hand);
+        }
+    }
     // TASK I: Check for books
     profiles[0].hand.sort((a,b) => a.value - b.value);
     findBooks();
 
     // TASK II: Choose a random player
     var randProfileIndex = Math.floor(Math.random() * (profiles.length - 1) + 1);
-    console.log(`${profiles[0].name} chooses to take from: ${profiles[randProfileIndex].name}.`);
+    // TASK II a: Check that the chosen player has at least 1 card
+    if (profiles[1].hand.length + profiles[2].hand.length < 1) {
+        console.log(`${profiles[0].name} can't play, no one else has any cards!`);
+        console.log(`${profiles[0].name}'s score: ${profiles[0].score}`);
+        console.log(`${profiles[1].name}'s score: ${profiles[1].score}`);
+        console.log(`${profiles[2].name}'s score: ${profiles[2].score}\n`);
+        return;
+        //return; // ??????
+    } else if (profiles[randProfileIndex].hand.length < 1) {
+        console.log(`${profiles[0].name} chose ${profiles[randProfileIndex].name}, but they have no cards.`);
+        botTurn();
+    } else {
+        console.log(`${profiles[0].name} chooses to take from: ${profiles[randProfileIndex].name}.`);
+    }
 
     // TASK III: Choose a random card, bring it to the top
+    // Sometimes players can get down to 0 cards in the middle of their turn by making books
+    if (profiles[0].hand.length < 1) {
+        console.log(`${profiles[0].name} must start by going fishing...`);
+        if (stock.length < 1) {
+            console.log("The stock is empty");
+            return;
+        } else {
+            dealRand(stock, profiles[0].hand);
+        }
+    }
     swapCard(profiles[0].hand, 0, (Math.floor(Math.random() * profiles[0].hand.length)));
     console.log(`${profiles[0].name} wants ${profiles[0].hand[0].value}s.`);
 
@@ -254,13 +292,25 @@ function botTurn() {
     } else {
         // GO FISH PROTOCOL
         console.log(`${profiles[0].name} goes fishing!`);
-        dealRand(stock, profiles[0].hand);
-        // TASK OMEGA: Check for books
-        profiles[0].hand.sort((a,b) => a.value - b.value);
-        findBooks();
-        nextTurn();
+
+        if (stock.length < 1) {
+            console.log(`${profiles[0].name} tried, but the stock is empty!`);
+            return;
+        } else {
+            dealRand(stock, profiles[0].hand);
+        }
     }
+
+    // TASK OMEGA: Check for books, pass turn
+    profiles[0].hand.sort((a,b) => a.value - b.value);
+
+    console.log(`${profiles[0].name}'s score: ${profiles[0].score}`);
+    console.log(`${profiles[1].name}'s score: ${profiles[1].score}`);
+    console.log(`${profiles[2].name}'s score: ${profiles[2].score}\n`);
+
+    profiles[0].hand.sort((a,b) => a.value - b.value);
+    findBooks();
+    nextTurn();
 }
 
 startGame();
-
