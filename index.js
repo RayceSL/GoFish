@@ -88,13 +88,6 @@ function swapCard(array, indexA, indexB) {
     array[indexB] = tmp;
 }
 
-// Deals a specific card from one player to another
-function deal(fromPlayer, fromIndex, toPlayer) {
-    swapCard(fromPlayer, fromIndex, 0);
-    toPlayer.unshift(fromPlayer[0]);
-    fromPlayer.shift();
-}
-
 // Deals a random card from one player to another to the BOTTOM of their hand
 // (end of their array)
 function dealRand(fromPlayer, toPlayer) {
