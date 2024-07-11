@@ -13,7 +13,7 @@ var stock = [
     {"name": "2♥",     "value": "2"    }, // index: 0
     {"name": "3♥",     "value": "3"    }, // index: 1
     {"name": "4♥",     "value": "4"    }, // index: 2
-    /* {"name": "5♥",     "value": "5"    }, // index: 3
+    {"name": "5♥",     "value": "5"    }, // index: 3
     {"name": "6♥",     "value": "6"    }, // index: 4
     {"name": "7♥",     "value": "7"    }, // index: 5
     {"name": "8♥",     "value": "8"    }, // index: 6
@@ -21,13 +21,13 @@ var stock = [
     {"name": "10♥",    "value": "10"   }, // index: 8
     {"name": "J♥",     "value": "11"   }, // index: 9
     {"name": "Q♥",     "value": "12"   }, // index: 10
-    {"name": "K♥",     "value": "13"   }, // index: 11 */
+    {"name": "K♥",     "value": "13"   }, // index: 11
     {"name": "A♥",     "value": "14"   }, // index: 12
 
     {"name": "2♣",     "value": "2"    }, // index: 13
     {"name": "3♣",     "value": "3"    }, // index: 14
     {"name": "4♣",     "value": "4"    }, // index: 15
-    /* {"name": "5♣",     "value": "5"    }, // index: 16
+    {"name": "5♣",     "value": "5"    }, // index: 16
     {"name": "6♣",     "value": "6"    }, // index: 17
     {"name": "7♣",     "value": "7"    }, // index: 18
     {"name": "8♣",     "value": "8"    }, // index: 19
@@ -35,13 +35,13 @@ var stock = [
     {"name": "10♣",    "value": "10"   }, // index: 21
     {"name": "J♣",     "value": "11"   }, // index: 22
     {"name": "Q♣",     "value": "12"   }, // index: 23
-    {"name": "K♣",     "value": "13"   }, // index: 24 */
+    {"name": "K♣",     "value": "13"   }, // index: 24
     {"name": "A♣",     "value": "14"   }, // index: 25
 
     {"name": "2♦",     "value": "2"    }, // index: 26
     {"name": "3♦",     "value": "3"    }, // index: 27
     {"name": "4♦",     "value": "4"    }, // index: 28
-   /*  {"name": "5♦",     "value": "5"    }, // index: 29
+    {"name": "5♦",     "value": "5"    }, // index: 29
     {"name": "6♦",     "value": "6"    }, // index: 30
     {"name": "7♦",     "value": "7"    }, // index: 31
     {"name": "8♦",     "value": "8"    }, // index: 32
@@ -49,13 +49,13 @@ var stock = [
     {"name": "10♦",    "value": "10"   }, // index: 34
     {"name": "J♦",     "value": "11"   }, // index: 35
     {"name": "Q♦",     "value": "12"   }, // index: 36
-    {"name": "K♦",     "value": "13"   }, // index: 37 */
+    {"name": "K♦",     "value": "13"   }, // index: 37
     {"name": "A♦",     "value": "14"   }, // index: 38
 
     {"name": "2♠",     "value": "2"    }, // index: 39
     {"name": "3♠",     "value": "3"    }, // index: 40
     {"name": "4♠",     "value": "4"    }, // index: 41
-   /*  {"name": "5♠",     "value": "5"    }, // index: 42
+    {"name": "5♠",     "value": "5"    }, // index: 42
     {"name": "6♠",     "value": "6"    }, // index: 43
     {"name": "7♠",     "value": "7"    }, // index: 44
     {"name": "8♠",     "value": "8"    }, // index: 45
@@ -63,7 +63,7 @@ var stock = [
     {"name": "10♠",    "value": "10"   }, // index: 47
     {"name": "J♠",     "value": "11"   }, // index: 48
     {"name": "Q♠",     "value": "12"   }, // index: 49
-    {"name": "K♠",     "value": "13"   }, // index: 50 */
+    {"name": "K♠",     "value": "13"   }, // index: 50
     {"name": "A♠",     "value": "14"   }  // index: 51
 ];
 
@@ -79,7 +79,7 @@ var profiles = [
 
 // 2--3 players: 7 cards
 // 4--5 players: 5 cards
-var startingCardCount = 2;
+var startingCardCount = 7;
 
 var getSecondTurn = false;
 
@@ -198,17 +198,19 @@ function startGame() {
     console.log(`The play is passed to ${profiles[1].name}.`);
     advanceProfiles();
     botTurn();
+    while (stock.length + player0.length + player1.length + player2.length > 0) {
+        nextTurn();
+        i++;
+    }
+    console.log("hello :-)");
 }
 
-/* function nextTurn() {
-    advanceProfiles();
-    console.log(`%cTurn: ${turns}`, "color:red");
+function nextTurn() {
     console.log(`Current player: ${profiles[0].name}.`);
-    //botTurn();
-} */
+    botTurn();
+}
 
 function botTurn() {
-    turns++;
     console.log(`%cTurn: ${turns}`, "color:red");
 
     console.log("%cStep 1", "color:yellow");
@@ -277,42 +279,55 @@ function botTurn() {
         skipRestOfTurn = true;
         botTurn();
     } else {
-        console.log("%c    GO FISH PROTOCOL", "color:blue");
+        console.log("%cGO FISH PROTOCOL", "color:blue");
         if (stock.length < 1) {
-            console.log("%cThe stock is empty!", "color:blue");
+            console.log("%c    The stock is empty!", "color:blue");
         } else {
             console.log(`    %c${profiles[0].name} goes fishing!`, "color:blue");
             dealRand(stock, profiles[0].hand);
         }
     }
 
-    if (skipRestOfTurn == false) {
+    if (skipRestOfTurn == false && getSecondTurn == false) {
         console.log("%cStep 9", "color:yellow");
         // 9
-        console.log("    END OF TURN: Sorting hand...");
+        console.log("%c    END OF TURN: Sorting hand...", "color:purple");
         profiles[0].hand.sort((a,b) => a.value - b.value);
 
         console.log("%cStep 10", "color:yellow");
         // 10
-        console.log("    END OF TURN: Checking for books...");
+        console.log("%c    END OF TURN: Checking for books...", "color:purple");
         findBooks();
 
         console.log("%cStep 11", "color:yellow");
         // 11
-        console.log("    END OF TURN: Incrementing turns...");
+        console.log("%c    END OF TURN: Incrementing turns...", "color:purple");
         turns++;
 
         console.log("%cStep 12", "color:yellow");
         // 12
         if (stock.length + player0.length + player1.length + player2.length > 0) {
-            console.log("    END OF TURN: Cards are still in play...");
+            console.log("%c    END OF TURN: Cards are still in play...", "color:purple");
+            console.log(`Cards in stock: ${stock.length}`);
+            console.log(`${profiles[0].name}'s hand: ${profiles[0].hand.length}`);
+            console.log(`${profiles[1].name}'s hand: ${profiles[1].hand.length}`);
+            console.log(`${profiles[2].name}'s hand: ${profiles[2].hand.length}`);
+
         } else if (stock.length + player0.length + player1.length + player2.length == 0) {
-            console.log("    END OF TURN: There are no cards in play!!", "color:orange");
+            console.log("%cEND OF GAME: There are no cards in play!!", "color:red");
+            skipRestOfTurn = true;
+            
+            console.log(`${profiles[0].name}'s score: ${profiles[0].score}`);
+            console.log(`${profiles[1].name}'s score: ${profiles[1].score}`);
+            console.log(`${profiles[2].name}'s score: ${profiles[2].score}`);
         }
 
         console.log("%cEND OF TURN\nAdvancing turn order...", "color:purple");
         advanceProfiles();
+        console.log("%cPlay is passed on", "color:green");
+        //botTurn();
     }
+    skipRestOfTurn = false;
 }
 
 console.log("%cGAME INITIALIZED", "color:green");
