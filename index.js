@@ -1,79 +1,84 @@
-// ♥ ♣ ♦ ♠
-let stock = [
-    // {"name": "Red Joker", "rank": "13", "suit": "4"},
-    // {"name": "Black Joker", "rank": "13", "suit": "4"},
+// I DO NOT KNOW WHY, BUT PLAYER'S HANDS
+// MUST BE SORTED BEFORE THE findBooks()
+// FUNCTION IS CALLED
+/**/
+// The cards that will be used in the game
+// Aces are high, even though "Go Fish" counts the number of books a player has
+// as their score, I'm just trusting Bicycle on this one
+// The two jokers are also removed
+var stock = [
+    {"name": "2♥",     "value": "2"    }, // index: 0
+    {"name": "3♥",     "value": "3"    }, // index: 1
+    {"name": "4♥",     "value": "4"    }, // index: 2
+    {"name": "5♥",     "value": "5"    }, // index: 3
+    {"name": "6♥",     "value": "6"    }, // index: 4
+    {"name": "7♥",     "value": "7"    }, // index: 5
+    {"name": "8♥",     "value": "8"    }, // index: 6
+    {"name": "9♥",     "value": "9"    }, // index: 7
+    {"name": "10♥",    "value": "10"   }, // index: 8
+    {"name": "J♥",     "value": "11"   }, // index: 9
+    {"name": "Q♥",     "value": "12"   }, // index: 10
+    {"name": "K♥",     "value": "13"   }, // index: 11
+    {"name": "A♥",     "value": "14"   }, // index: 12
 
-    {"name": "A♥",  "value": 14, "suit": "Hearts (♥)", "rank": "Ace",   "rankPlural": "Aces"},
-    {"name": "2♥",  "value": 2,  "suit": "Hearts (♥)", "rank": "Two",   "rankPlural": "Twos"},
-    {"name": "3♥",  "value": 3,  "suit": "Hearts (♥)", "rank": "Three", "rankPlural": "Threes"},
-    {"name": "4♥",  "value": 4,  "suit": "Hearts (♥)", "rank": "Four",  "rankPlural": "Fours"},
-    {"name": "5♥",  "value": 5,  "suit": "Hearts (♥)", "rank": "Five",  "rankPlural": "Fives"},
-    {"name": "6♥",  "value": 6,  "suit": "Hearts (♥)", "rank": "Six",   "rankPlural": "Sixes"},
-    {"name": "7♥",  "value": 8,  "suit": "Hearts (♥)", "rank": "Seven", "rankPlural": "Sevens"},
-    {"name": "8♥",  "value": 7,  "suit": "Hearts (♥)", "rank": "Eight", "rankPlural": "Eights"},
-    {"name": "9♥",  "value": 9,  "suit": "Hearts (♥)", "rank": "Nine",  "rankPlural": "Nines"},
-    {"name": "10♥", "value": 10, "suit": "Hearts (♥)", "rank": "Ten",   "rankPlural": "Tens"},
-    {"name": "J♥",  "value": 11, "suit": "Hearts (♥)", "rank": "Jack",  "rankPlural": "Jacks"},
-    {"name": "Q♥",  "value": 12, "suit": "Hearts (♥)", "rank": "Queen", "rankPlural": "Queens"},
-    {"name": "K♥",  "value": 13, "suit": "Hearts (♥)", "rank": "King",  "rankPlural": "Kings"},
+    {"name": "2♣",     "value": "2"    }, // index: 13
+    {"name": "3♣",     "value": "3"    }, // index: 14
+    {"name": "4♣",     "value": "4"    }, // index: 15
+    {"name": "5♣",     "value": "5"    }, // index: 16
+    {"name": "6♣",     "value": "6"    }, // index: 17
+    {"name": "7♣",     "value": "7"    }, // index: 18
+    {"name": "8♣",     "value": "8"    }, // index: 19
+    {"name": "9♣",     "value": "9"    }, // index: 20
+    {"name": "10♣",    "value": "10"   }, // index: 21
+    {"name": "J♣",     "value": "11"   }, // index: 22
+    {"name": "Q♣",     "value": "12"   }, // index: 23
+    {"name": "K♣",     "value": "13"   }, // index: 24
+    {"name": "A♣",     "value": "14"   }, // index: 25
 
-    {"name": "A♣",  "value": 14, "suit": "Clubs (♣)", "rank": "Ace",   "rankPlural": "Aces"},
-    {"name": "2♣",  "value": 2,  "suit": "Clubs (♣)", "rank": "Two",   "rankPlural": "Twos"},
-    {"name": "3♣",  "value": 3,  "suit": "Clubs (♣)", "rank": "Three", "rankPlural": "Threes"},
-    {"name": "4♣",  "value": 4,  "suit": "Clubs (♣)", "rank": "Four",  "rankPlural": "Fours"},
-    {"name": "5♣",  "value": 5,  "suit": "Clubs (♣)", "rank": "Five",  "rankPlural": "Fives"},
-    {"name": "6♣",  "value": 6,  "suit": "Clubs (♣)", "rank": "Six",   "rankPlural": "Sixes"},
-    {"name": "7♣",  "value": 8,  "suit": "Clubs (♣)", "rank": "Seven", "rankPlural": "Sevens"},
-    {"name": "8♣",  "value": 7,  "suit": "Clubs (♣)", "rank": "Eight", "rankPlural": "Eights"},
-    {"name": "9♣",  "value": 9,  "suit": "Clubs (♣)", "rank": "Nine",  "rankPlural": "Nines"},
-    {"name": "10♣", "value": 10, "suit": "Clubs (♣)", "rank": "Ten",   "rankPlural": "Tens"},
-    {"name": "J♣",  "value": 11, "suit": "Clubs (♣)", "rank": "Jack",  "rankPlural": "Jacks"},
-    {"name": "Q♣",  "value": 12, "suit": "Clubs (♣)", "rank": "Queen", "rankPlural": "Queens"},
-    {"name": "K♣",  "value": 13, "suit": "Clubs (♣)", "rank": "King",  "rankPlural": "Kings"},
+    {"name": "2♦",     "value": "2"    }, // index: 26
+    {"name": "3♦",     "value": "3"    }, // index: 27
+    {"name": "4♦",     "value": "4"    }, // index: 28
+    {"name": "5♦",     "value": "5"    }, // index: 29
+    {"name": "6♦",     "value": "6"    }, // index: 30
+    {"name": "7♦",     "value": "7"    }, // index: 31
+    {"name": "8♦",     "value": "8"    }, // index: 32
+    {"name": "9♦",     "value": "9"    }, // index: 33
+    {"name": "10♦",    "value": "10"   }, // index: 34
+    {"name": "J♦",     "value": "11"   }, // index: 35
+    {"name": "Q♦",     "value": "12"   }, // index: 36
+    {"name": "K♦",     "value": "13"   }, // index: 37
+    {"name": "A♦",     "value": "14"   }, // index: 38
 
-    {"name": "A♦",  "value": 14, "suit": "Diamonds (♦)", "rank": "Ace",   "rankPlural": "Aces"},
-    {"name": "2♦",  "value": 2,  "suit": "Diamonds (♦)", "rank": "Two",   "rankPlural": "Twos"},
-    {"name": "3♦",  "value": 3,  "suit": "Diamonds (♦)", "rank": "Three", "rankPlural": "Threes"},
-    {"name": "4♦",  "value": 4,  "suit": "Diamonds (♦)", "rank": "Four",  "rankPlural": "Fours"},
-    {"name": "5♦",  "value": 5,  "suit": "Diamonds (♦)", "rank": "Five",  "rankPlural": "Fives"},
-    {"name": "6♦",  "value": 6,  "suit": "Diamonds (♦)", "rank": "Six",   "rankPlural": "Sixes"},
-    {"name": "7♦",  "value": 8,  "suit": "Diamonds (♦)", "rank": "Seven", "rankPlural": "Sevens"},
-    {"name": "8♦",  "value": 7,  "suit": "Diamonds (♦)", "rank": "Eight", "rankPlural": "Eights"},
-    {"name": "9♦",  "value": 9,  "suit": "Diamonds (♦)", "rank": "Nine",  "rankPlural": "Nines"},
-    {"name": "10♦", "value": 10, "suit": "Diamonds (♦)", "rank": "Ten",   "rankPlural": "Tens"},
-    {"name": "J♦",  "value": 11, "suit": "Diamonds (♦)", "rank": "Jack",  "rankPlural": "Jacks"},
-    {"name": "Q♦",  "value": 12, "suit": "Diamonds (♦)", "rank": "Queen", "rankPlural": "Queens"},
-    {"name": "K♦",  "value": 13, "suit": "Diamonds (♦)", "rank": "King",  "rankPlural": "Kings"},
-
-    {"name": "A♠",  "value": 14, "suit": "Spades (♠)", "rank": "Ace",   "rankPlural": "Aces"},
-    {"name": "2♠",  "value": 2,  "suit": "Spades (♠)", "rank": "Two",   "rankPlural": "Twos"},
-    {"name": "3♠",  "value": 3,  "suit": "Spades (♠)", "rank": "Three", "rankPlural": "Threes"},
-    {"name": "4♠",  "value": 4,  "suit": "Spades (♠)", "rank": "Four",  "rankPlural": "Fours"},
-    {"name": "5♠",  "value": 5,  "suit": "Spades (♠)", "rank": "Five",  "rankPlural": "Fives"},
-    {"name": "6♠",  "value": 6,  "suit": "Spades (♠)", "rank": "Six",   "rankPlural": "Sixes"},
-    {"name": "7♠",  "value": 8,  "suit": "Spades (♠)", "rank": "Seven", "rankPlural": "Sevens"},
-    {"name": "8♠",  "value": 7,  "suit": "Spades (♠)", "rank": "Eight", "rankPlural": "Eights"},
-    {"name": "9♠",  "value": 9,  "suit": "Spades (♠)", "rank": "Nine",  "rankPlural": "Nines"},
-    {"name": "10♠", "value": 10, "suit": "Spades (♠)", "rank": "Ten",   "rankPlural": "Tens"},
-    {"name": "J♠",  "value": 11, "suit": "Spades (♠)", "rank": "Jack",  "rankPlural": "Jacks"},
-    {"name": "Q♠",  "value": 12, "suit": "Spades (♠)", "rank": "Queen", "rankPlural": "Queens"},
-    {"name": "K♠",  "value": 13, "suit": "Spades (♠)", "rank": "King",  "rankPlural": "Kings"}
+    {"name": "2♠",     "value": "2"    }, // index: 39
+    {"name": "3♠",     "value": "3"    }, // index: 40
+    {"name": "4♠",     "value": "4"    }, // index: 41
+    {"name": "5♠",     "value": "5"    }, // index: 42
+    {"name": "6♠",     "value": "6"    }, // index: 43
+    {"name": "7♠",     "value": "7"    }, // index: 44
+    {"name": "8♠",     "value": "8"    }, // index: 45
+    {"name": "9♠",     "value": "9"    }, // index: 46
+    {"name": "10♠",    "value": "10"   }, // index: 47
+    {"name": "J♠",     "value": "11"   }, // index: 48
+    {"name": "Q♠",     "value": "12"   }, // index: 49
+    {"name": "K♠",     "value": "13"   }, // index: 50
+    {"name": "A♠",     "value": "14"   }  // index: 51
 ];
 
-let player0 = [];
-let player1 = [];
-let player2 = [];
-let player3 = [];
-let player4 = [];
-// let currentPlayer = ["Abby", "Bob", "Clara", "Dolton", "Y/N"];
-let currentPlayer = ["Abby", "Bob", "Y/N"];
+var player0 = [];
+var player1 = [];
+var player2 = [];
 
-let books0 = [];
-let books1 = [];
-let books2 = [];
-let books3 = [];
-let books4 = [];
-let bookNames = ["Your books", "Abby's books", "Bob's books", "Clara's books", "Dolton's books"];
+var profiles = [
+    {"name": "Rayce",   "hand": player0,    "score": 0},
+    {"name": "Abby",    "hand": player1,    "score": 0},
+    {"name": "Bob",     "hand": player2,    "score": 0}
+];
+
+var startingCardCount = 7;
+
+var getSecondTurn = false;
+
+var turns = 0;
 
 // Swaps two cards' positions in an index
 // Took this guy's code: https://stackoverflow.com/a/2440720/25562183
@@ -90,139 +95,229 @@ function deal(fromPlayer, fromIndex, toPlayer) {
     fromPlayer.shift();
 }
 
-// Deals a random card from one player to another
+// Deals a random card from one player to another to the BOTTOM of their hand
+// (end of their array)
 function dealRand(fromPlayer, toPlayer) {
     let randIndex = (Math.floor(Math.random() * fromPlayer.length));
     swapCard(fromPlayer, randIndex, 0);
-    toPlayer.unshift(fromPlayer[0]);
+    toPlayer.push(fromPlayer[0]);
     fromPlayer.shift();
 }
 
-// Finds books in a player's hand
-// Only works if a player has 4 or more cards!!
-// Input the player and where they should put their books
-function findBooks(player, books) {
-    player.sort((a,b) => a.rank - b.rank);
-    let i = 0
-    while(i < 51 && player.length >= 4) {
-        let total = 0;
-        if (player[0].rank == player[1].rank) {
-            total++;
-            if (player[0].rank == player[2].rank) {
-                total++;
-                if (player[0].rank == player[3].rank) {
-                    total++;
-                    if (total == 3) {
-                        deal(player, 0, books);
-                        deal(player, 0, books);
-                        deal(player, 0, books);
-                        deal(player, 0, books);
+// Deals a specific card from one player to another to the BOTTOM of their hand
+// (end of their array)
+function deal(index, fromPlayer, toPlayer) {
+    swapCard(fromPlayer, index, 0);
+    toPlayer.push(fromPlayer[0]);
+    fromPlayer.shift();
+}
+
+function advanceProfiles() {
+    profiles.push(profiles[0]);
+    profiles.shift();
+}
+
+// remember to format as profiles[x].hand
+function advanceHand(player) {
+    player.push(player[0]);
+    player.shift();
+}
+
+// locates fours-of-a-kind (called "books") in the current player's hand,
+// Adds a point to the player's score
+function findBooks() {
+    profiles[0].hand.sort((a,b) => a.value - b.value);
+    var matchesFound = 0;
+    let i = 0;
+    while (i < 51 && profiles[0].hand.length >= 4) {
+
+        if (profiles[0].hand[0].value == profiles[0].hand[1].value) {
+            matchesFound++;
+            //console.log(`Matches found: ${matchesFound}`);
+
+            if (profiles[0].hand[0].value == profiles[0].hand[2].value) {
+                matchesFound++;
+                //console.log(`Matches found: ${matchesFound}`);
+
+                if (profiles[0].hand[0].value == profiles[0].hand[3].value) {
+                    matchesFound++;
+                    //console.log(`Matches found: ${matchesFound}`);
+
+                    if (matchesFound == 3) {
+                        console.log("Book found!");
+                        profiles[0].score++;
+                        console.log(`Score: ${profiles[0].score}`);
+                        profiles[0].hand.shift();
+                        profiles[0].hand.shift();
+                        profiles[0].hand.shift();
+                        profiles[0].hand.shift();
+                        matchesFound = 0;
                     }
                 } else {
-                    player.push(player[0]);
-                    player.shift();
-                    total = 0;
+                    matchesFound = 0;
+                    advanceHand(profiles[0].hand);
                     i++;
                 }
             } else {
-                player.push(player[0]);
-                player.shift();
-                total = 0;
+                matchesFound = 0;
+                advanceHand(profiles[0].hand);
                 i++;
             }
         } else {
-            player.push(player[0]);
-            player.shift();
-            total = 0;
+            matchesFound = 0;
+            advanceHand(profiles[0].hand);
             i++;
         }
     }
 }
 
-/*
-███████ ████████  █████  ██████  ████████      ██████   █████  ███    ███ ███████ 
-██         ██    ██   ██ ██   ██    ██        ██       ██   ██ ████  ████ ██      
-███████    ██    ███████ ██████     ██        ██   ███ ███████ ██ ████ ██ █████   
-     ██    ██    ██   ██ ██   ██    ██        ██    ██ ██   ██ ██  ██  ██ ██      
-███████    ██    ██   ██ ██   ██    ██         ██████  ██   ██ ██      ██ ███████ 
-*/
-
-// For now, I'll proceed with 3 players only, and player0 is always the dealer
-// This deals 7 cards to each player
-for (i = 0; i < 14; i++) {
-    dealRand(stock, player0);
-    dealRand(stock, player1);
-    dealRand(stock, player2);
-}
-
-console.log(`\n${currentPlayer[0]}'s hand: ${player1.length} cards.`);
-console.log(`${currentPlayer[1]}'s hand: ${player2.length} cards.`);
-console.log(`${currentPlayer[2]}'s hand: ${player0.length} cards.\n`);
-
-// First turn should be player1 "Abby", then player2 "Bob", then player0 "Y/N"
-/*
-Stupid bot turn structure:
-
-1. Choose a random rank from own hand and a random player to take from
-
-2. Check the chosen player's hand for cards of the matching rank
-
-3. Take all cards of matching rank from them, pass turn to next player
-
-4. If they have no cards of matching rank, take one card from the stock
-
-5. Pass turn to next player
-*/
-
-let catches = 0;
-
-function player1Turn() {
-    catches = 0;
-    // Choose random rank from own hand
-    let randIndex = (Math.floor(Math.random() * player1.length));
-
-    let otherPlayers = [
-        {"playerName": "Y/N", "playerArray": player0}, 
-        {"playerName": "Bob", "playerArray": player2}
-    ];
-
-    // Choose random player to take from
-    let randPlayerObject = (Math.floor(Math.random() * otherPlayers.length));
-    // Splitting the randPlayerObject like this is uneccessary, but it makes it easier to read
-    let randPlayerArray = otherPlayers[randPlayerObject].playerArray;
-    let randPlayerName = otherPlayers[randPlayerObject].playerName;
-
-    // Ask for cards
-    console.log(`${currentPlayer[0]} asks ${randPlayerName} for all their ${player1[randIndex].rankPlural}.`);
-
-    // START MATCHING FUNCTION
-    for (i = 0; i < randPlayerArray.length; i++) {
-        if (player1[randIndex].rank == randPlayerArray[0].rank) {
-            catches++;
-            player1.push(randPlayerArray[0]); // So the reference card doesn't change its index
-            randPlayerArray.shift(); // removes the card from fromPlayer's hand
-            //               ↓ Taking from                  ↓ Card just taken                   ↓ current player
-            console.log(`${randPlayerName} gives up the ${player1[player1.length-1].name} to ${currentPlayer[0]}.`);
+// takeMatches(profiles[randProfileIndex], profiles[0]);
+function takeMatches(fromPlayer, toPlayer) {
+    let i = 0;
+    while (i < 51 && fromPlayer.hand.length >= 1) {
+        if (toPlayer.hand[0].value == fromPlayer.hand[0].value) {
+            deal(0, fromPlayer.hand, toPlayer.hand);
+            console.log(`${fromPlayer.name} gave ${toPlayer.name} the ${toPlayer.hand[(toPlayer.hand.length)-1].name}.`);
+            getSecondTurn = true;
         } else {
-            // If the matching card isn't found at index 0, move it to the back and keep checking
-            randPlayerArray.push(randPlayerArray[0]);
-            randPlayerArray.shift();
-            if (i == randPlayerArray.length-1 && catches < 1) {
-                console.log(`${randPlayerName} tells ${currentPlayer[0]} to go fish!\n`);
-                catches = 0;
-                console.log(`\n${currentPlayer[0]}'s hand: ${player1.length} cards.`);
-                console.log(`${currentPlayer[1]}'s hand: ${player2.length} cards.`);
-                console.log(`${currentPlayer[2]}'s hand: ${player0.length} cards.\n`);
-            }
+            advanceHand(fromPlayer.hand);
+            i++;
         }
     }
-    if (catches >= 1) {
-        console.log(`${currentPlayer[0]} gets to go again!\n`);
-        catches = 0;
-        player1Turn();
-    }
-    // END MATCHING FUNCTION
 }
 
-player1Turn();
+// Debugging purposes
+// Deals a book and some random cards to the first player
+/* 
+function win() {
+    var randomCardsAdded = 40;
+    console.log(`Dealing cards to ${profiles[0].name}...`);
+    
+    for (suit = 1; suit <= 4; suit++) {
+        // Each iteration, the array gets smaller---this compensates for that
+        //                    ____/\____
+        //                   /          \
+        deal((13 * suit - 1) - (suit - 1), stock, profiles[0].hand);
+    }
 
+    for (i = 0; i < randomCardsAdded; i++) {
+        dealRand(stock, profiles[0].hand);
+    }
+    console.log(`Dealt ${profiles[0].hand.length} cards to ${profiles[0].name}.`);
+    console.log("Their hand:");
+    profiles[0].hand.sort((a,b) => a.value - b.value);
+    console.log(profiles[0].hand);
+    console.log(`${profiles[0].name} looks for books...`);
+    findBooks();
+    console.log(`Found ${profiles[0].score} books!`);
+    console.log("Their hand:");
+    console.log(profiles[0].hand);
+}
+ */
+
+// TASK I: Deals seven cards to each player
+function startGame() {
+    console.log("%cStarted game!", "color:green");
+    console.log(`${profiles[0].name} is the dealer.\nThey deal ${startingCardCount} cards to everyone...`);
+    for (i = 1; i <= startingCardCount * profiles.length; i++) {
+        // console.log(`Dealing to: ${profiles[0].name}`);
+        dealRand(stock, profiles[0].hand);
+        advanceProfiles();
+    }
+    advanceProfiles();
+    console.log(`The play is passed to ${profiles[0].name}.\n`);
+    botTurn();
+}
+
+function nextTurn() {
+    advanceProfiles();
+    console.log(`${profiles[0].name}'s hand: ${profiles[0].hand.length}`);
+    console.log(`${profiles[1].name}'s hand: ${profiles[1].hand.length}`);
+    console.log(`${profiles[2].name}'s hand: ${profiles[2].hand.length}\n`);
+    console.log(`Stock: ${stock.length}\n`);
+    
+    console.log(`Turn: ${turns}`);
+    console.log(`Current player: ${profiles[0].name}.`);
+    turns++;
+    botTurn();
+}
+
+function botTurn() {
+    // TASK 0: If hand is empty, go fish, then proceed
+    if (profiles[0].hand.length < 0) {
+        console.log(`${profiles[0].name} must start by going fishing...`);
+        if (stock.length < 1) {
+            console.log("The stock is empty");
+            return;
+        } else {
+            dealRand(stock, profiles[0].hand);
+        }
+    }
+    // TASK I: Check for books
+    profiles[0].hand.sort((a,b) => a.value - b.value);
+    findBooks();
+
+    // TASK II: Choose a random player
+    var randProfileIndex = Math.floor(Math.random() * (profiles.length - 1) + 1);
+    // TASK II a: Check that the chosen player has at least 1 card
+    if (profiles[1].hand.length + profiles[2].hand.length < 1) {
+        console.log(`${profiles[0].name} can't play, no one else has any cards!`);
+        console.log(`${profiles[0].name}'s score: ${profiles[0].score}`);
+        console.log(`${profiles[1].name}'s score: ${profiles[1].score}`);
+        console.log(`${profiles[2].name}'s score: ${profiles[2].score}\n`);
+        return;
+        //return; // ??????
+    } else if (profiles[randProfileIndex].hand.length < 1) {
+        console.log(`${profiles[0].name} chose ${profiles[randProfileIndex].name}, but they have no cards.`);
+        botTurn();
+    } else {
+        console.log(`${profiles[0].name} chooses to take from: ${profiles[randProfileIndex].name}.`);
+    }
+
+    // TASK III: Choose a random card, bring it to the top
+    // Sometimes players can get down to 0 cards in the middle of their turn by making books
+    if (profiles[0].hand.length < 1) {
+        console.log(`${profiles[0].name} must start by going fishing...`);
+        if (stock.length < 1) {
+            console.log("The stock is empty");
+            return;
+        } else {
+            dealRand(stock, profiles[0].hand);
+        }
+    }
+    swapCard(profiles[0].hand, 0, (Math.floor(Math.random() * profiles[0].hand.length)));
+    console.log(`${profiles[0].name} wants ${profiles[0].hand[0].value}s.`);
+
+    // TASK IV: Take all matching cards from the player
+    console.log(`${profiles[randProfileIndex].name} looks through their cards...`);
+    takeMatches(profiles[randProfileIndex], profiles[0]);
+    
+    // TASK V: If player got at least 1 match, they get to go again
+    if (getSecondTurn == true) {
+        getSecondTurn = false;
+        botTurn();
+    } else {
+        // GO FISH PROTOCOL
+        console.log(`${profiles[0].name} goes fishing!`);
+
+        if (stock.length < 1) {
+            console.log(`${profiles[0].name} tried, but the stock is empty!`);
+            return;
+        } else {
+            dealRand(stock, profiles[0].hand);
+        }
+    }
+
+    // TASK OMEGA: Check for books, pass turn
+    profiles[0].hand.sort((a,b) => a.value - b.value);
+
+    console.log(`${profiles[0].name}'s score: ${profiles[0].score}`);
+    console.log(`${profiles[1].name}'s score: ${profiles[1].score}`);
+    console.log(`${profiles[2].name}'s score: ${profiles[2].score}\n`);
+
+    profiles[0].hand.sort((a,b) => a.value - b.value);
+    findBooks();
+    nextTurn();
+}
+
+startGame();
