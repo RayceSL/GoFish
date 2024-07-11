@@ -274,7 +274,6 @@ function botTurn() {
         console.log(`${profiles[0].name}'s score: ${profiles[0].score}`);
         console.log(`${profiles[1].name}'s score: ${profiles[1].score}`);
         console.log(`${profiles[2].name}'s score: ${profiles[2].score}`);
-        return;
     } else {
         console.log("%cidk man", "color:purple");
     }
