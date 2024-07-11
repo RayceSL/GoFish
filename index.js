@@ -1,3 +1,6 @@
+// Variables & arrays
+
+
 // I DO NOT KNOW WHY, BUT PLAYER'S HANDS
 // MUST BE SORTED BEFORE THE findBooks()
 // FUNCTION IS CALLED
@@ -10,7 +13,7 @@ var stock = [
     {"name": "2♥",     "value": "2"    }, // index: 0
     {"name": "3♥",     "value": "3"    }, // index: 1
     {"name": "4♥",     "value": "4"    }, // index: 2
-    {"name": "5♥",     "value": "5"    }, // index: 3
+    /* {"name": "5♥",     "value": "5"    }, // index: 3
     {"name": "6♥",     "value": "6"    }, // index: 4
     {"name": "7♥",     "value": "7"    }, // index: 5
     {"name": "8♥",     "value": "8"    }, // index: 6
@@ -18,13 +21,13 @@ var stock = [
     {"name": "10♥",    "value": "10"   }, // index: 8
     {"name": "J♥",     "value": "11"   }, // index: 9
     {"name": "Q♥",     "value": "12"   }, // index: 10
-    {"name": "K♥",     "value": "13"   }, // index: 11
+    {"name": "K♥",     "value": "13"   }, // index: 11 */
     {"name": "A♥",     "value": "14"   }, // index: 12
 
     {"name": "2♣",     "value": "2"    }, // index: 13
     {"name": "3♣",     "value": "3"    }, // index: 14
     {"name": "4♣",     "value": "4"    }, // index: 15
-    {"name": "5♣",     "value": "5"    }, // index: 16
+    /* {"name": "5♣",     "value": "5"    }, // index: 16
     {"name": "6♣",     "value": "6"    }, // index: 17
     {"name": "7♣",     "value": "7"    }, // index: 18
     {"name": "8♣",     "value": "8"    }, // index: 19
@@ -32,13 +35,13 @@ var stock = [
     {"name": "10♣",    "value": "10"   }, // index: 21
     {"name": "J♣",     "value": "11"   }, // index: 22
     {"name": "Q♣",     "value": "12"   }, // index: 23
-    {"name": "K♣",     "value": "13"   }, // index: 24
+    {"name": "K♣",     "value": "13"   }, // index: 24 */
     {"name": "A♣",     "value": "14"   }, // index: 25
 
     {"name": "2♦",     "value": "2"    }, // index: 26
     {"name": "3♦",     "value": "3"    }, // index: 27
     {"name": "4♦",     "value": "4"    }, // index: 28
-    {"name": "5♦",     "value": "5"    }, // index: 29
+   /*  {"name": "5♦",     "value": "5"    }, // index: 29
     {"name": "6♦",     "value": "6"    }, // index: 30
     {"name": "7♦",     "value": "7"    }, // index: 31
     {"name": "8♦",     "value": "8"    }, // index: 32
@@ -46,13 +49,13 @@ var stock = [
     {"name": "10♦",    "value": "10"   }, // index: 34
     {"name": "J♦",     "value": "11"   }, // index: 35
     {"name": "Q♦",     "value": "12"   }, // index: 36
-    {"name": "K♦",     "value": "13"   }, // index: 37
+    {"name": "K♦",     "value": "13"   }, // index: 37 */
     {"name": "A♦",     "value": "14"   }, // index: 38
 
     {"name": "2♠",     "value": "2"    }, // index: 39
     {"name": "3♠",     "value": "3"    }, // index: 40
     {"name": "4♠",     "value": "4"    }, // index: 41
-    {"name": "5♠",     "value": "5"    }, // index: 42
+   /*  {"name": "5♠",     "value": "5"    }, // index: 42
     {"name": "6♠",     "value": "6"    }, // index: 43
     {"name": "7♠",     "value": "7"    }, // index: 44
     {"name": "8♠",     "value": "8"    }, // index: 45
@@ -60,7 +63,7 @@ var stock = [
     {"name": "10♠",    "value": "10"   }, // index: 47
     {"name": "J♠",     "value": "11"   }, // index: 48
     {"name": "Q♠",     "value": "12"   }, // index: 49
-    {"name": "K♠",     "value": "13"   }, // index: 50
+    {"name": "K♠",     "value": "13"   }, // index: 50 */
     {"name": "A♠",     "value": "14"   }  // index: 51
 ];
 
@@ -74,12 +77,17 @@ var profiles = [
     {"name": "Bob",     "hand": player2,    "score": 0}
 ];
 
-var startingCardCount = 7;
+// 2--3 players: 7 cards
+// 4--5 players: 5 cards
+var startingCardCount = 2;
 
 var getSecondTurn = false;
 
-var turns = 1;
+var turns = 0;
 
+var skipRestOfTurn = false;
+
+// Other functions
 // Swaps two cards' positions in an index
 // Took this guy's code: https://stackoverflow.com/a/2440720/25562183
 function swapCard(array, indexA, indexB) {
@@ -162,114 +170,150 @@ function findBooks() {
 
 // takeMatches(profiles[randProfileIndex], profiles[0]);
 function takeMatches(fromPlayer, toPlayer) {
+    console.log(" > takeMatches called");
     let i = 0;
     while (i < 51 && fromPlayer.hand.length >= 1) {
         if (toPlayer.hand[0].value == fromPlayer.hand[0].value) {
+            console.log("    Match found");
             deal(0, fromPlayer.hand, toPlayer.hand);
-            console.log(`${fromPlayer.name} gave ${toPlayer.name} the ${toPlayer.hand[(toPlayer.hand.length)-1].name}.`);
+            console.log(`    ${fromPlayer.name} gave ${toPlayer.name} the ${toPlayer.hand[(toPlayer.hand.length)-1].name}.`);
+            console.log(`    ${profiles[0].name} gets a second turn...`);
             getSecondTurn = true;
         } else {
+            console.log("    Cycling their hand...");
             advanceHand(fromPlayer.hand);
             i++;
         }
     }
+    console.log(" > takeMatches exited");
 }
 
-// TASK I: Deals seven cards to each player
 function startGame() {
     console.log("%cStarted game!", "color:green");
     console.log(`${profiles[0].name} is the dealer.\nThey deal ${startingCardCount} cards to everyone...`);
     for (i = 1; i <= startingCardCount * profiles.length; i++) {
-        // console.log(`Dealing to: ${profiles[0].name}`);
         dealRand(stock, profiles[0].hand);
         advanceProfiles();
     }
+    console.log(`The play is passed to ${profiles[1].name}.`);
     advanceProfiles();
-    console.log(`The play is passed to ${profiles[0].name}.`);
-    console.log(`%cTurn: ${turns}`, "color:red");
     botTurn();
 }
 
-function nextTurn() {
+/* function nextTurn() {
     advanceProfiles();
     console.log(`%cTurn: ${turns}`, "color:red");
     console.log(`Current player: ${profiles[0].name}.`);
-    botTurn();
-}
+    //botTurn();
+} */
 
 function botTurn() {
-    // TASK I: Check for books
+    turns++;
+    console.log(`%cTurn: ${turns}`, "color:red");
+
+    console.log("%cStep 1", "color:yellow");
+    // 1
+    console.log("    Sorting hand...");
     profiles[0].hand.sort((a,b) => a.value - b.value);
+
+    console.log("%cStep 2", "color:yellow");
+    // 2
+    console.log("    Checking for books...");
     findBooks();
 
-    // TASK II: Choose a random player
+    console.log("%cStep 3", "color:yellow");
+    // 3
+    console.log("    Choosing a player...");
     var randProfileIndex = Math.floor(Math.random() * (profiles.length - 1) + 1);
+    
+    console.log("%cStep 4", "color:yellow");
+    // 4
     if (profiles[1].hand.length + profiles[2].hand.length < 1) {
-        console.log(`${profiles[0].name} can't play, no one else has any cards!`);
+        console.log("%c    The other players have no cards!", "color:orange");
     } else if (profiles[randProfileIndex].hand.length < 1) {
-        console.log(`${profiles[0].name} chose ${profiles[randProfileIndex].name}, but they have no cards.`);
-        console.log("So they try again!");
+        console.log("%c    The chosen player has no cards!", "color:orange");
+        console.log("%c    SCENARIO A: Restarting turn...", "color:green");
+        skipRestOfTurn = true;
         botTurn();
     } else {
-        console.log(`${profiles[0].name} chooses to take from: ${profiles[randProfileIndex].name}.`);
+        console.log("    The other players have cards.");
     }
 
-    // TASK III: Choose a random card, bring it to the top
+    console.log("%cStep 5", "color:yellow");
+    // 5
     // Sometimes players can get down to 0 cards in the middle of their turn by making books
+    console.log(`    Checking if ${profiles[0].name} has cards...`);
     if (profiles[0].hand.length < 1) {
-        console.log(`${profiles[0].name} must start by going fishing...`);
+        console.log(`%c    ${profiles[0].name} has an empty hand!!`, "color:orange");
         if (stock.length < 1) {
-            console.log("The stock is empty");
-            console.log("%cENDPOINT C", "color:yellow");
-            //return;
+            console.log("%cThe stock is empty!", "color:orange");
         } else {
+            console.log(`    %c${profiles[0].name} draws from the stock...`);
             dealRand(stock, profiles[0].hand);
+            console.log("%c    SCENARIO B: Restarting turn...", "color:green");
+            skipRestOfTurn = true;
+            botTurn();
         }
     } else {
+        console.log(`    ${profiles[0].name} has cards in their hand...`);
+        console.log("%cStep 6", "color:yellow");
+        // 6
+        console.log("    Choosing a rank to pick...");
         swapCard(profiles[0].hand, 0, (Math.floor(Math.random() * profiles[0].hand.length)));
-        console.log(`${profiles[0].name} wants ${profiles[0].hand[0].value}s.`);
+        // console.log(`${profiles[0].name} wants ${profiles[0].hand[0].value}s.`);
 
-        // TASK IV: Take all matching cards from the player
-        console.log(`${profiles[randProfileIndex].name} looks through their cards...`);
+        console.log("%cStep 7", "color:yellow");
+        // 7
+        console.log("    Taking matches...");
         takeMatches(profiles[randProfileIndex], profiles[0]);
     }
     
-    // TASK V: If player got at least 1 match, they get to go again
+    console.log("%cStep 8", "color:yellow");
+    // 8
     if (getSecondTurn == true) {
+        console.log("Second turn allowed;\ngetSecondTurn = false;");
         getSecondTurn = false;
+        console.log("%c    SCENARIO C: Restarting turn...", "color:green");
+        skipRestOfTurn = true;
         botTurn();
     } else {
-        // GO FISH PROTOCOL
-        console.log(`${profiles[0].name} goes fishing!`);
+        console.log("%c    GO FISH PROTOCOL", "color:blue");
         if (stock.length < 1) {
-            console.log(`${profiles[0].name} tried, but the stock is empty!`);
-            console.log("%cENDPOINT B", "color:yellow");
+            console.log("%cThe stock is empty!", "color:blue");
         } else {
+            console.log(`    %c${profiles[0].name} goes fishing!`, "color:blue");
             dealRand(stock, profiles[0].hand);
-            console.log("%cENDPOINT A", "color:yellow");
         }
     }
 
-    // TASK OMEGA: Check for books, pass turn
-    profiles[0].hand.sort((a,b) => a.value - b.value);
-    findBooks();
-    turns++;
+    if (skipRestOfTurn == false) {
+        console.log("%cStep 9", "color:yellow");
+        // 9
+        console.log("    END OF TURN: Sorting hand...");
+        profiles[0].hand.sort((a,b) => a.value - b.value);
 
-    // Only pass turn if someone has cards in their hand
-    if (stock.length + player0.length + player1.length + player2.length > 0) {
-        console.log("%cPASSES TURN", "color:blue");
-        console.log(`${profiles[0].name}'s hand: ${profiles[0].hand.length}`);
-        console.log(`${profiles[1].name}'s hand: ${profiles[1].hand.length}`);
-        console.log(`${profiles[2].name}'s hand: ${profiles[2].hand.length}`);
-        nextTurn();
-    } else if (stock.length + player0.length + player1.length + player2.length == 0) {
-        console.log("%cGAME ENDED", "color:orange");
-        console.log(`${profiles[0].name}'s score: ${profiles[0].score}`);
-        console.log(`${profiles[1].name}'s score: ${profiles[1].score}`);
-        console.log(`${profiles[2].name}'s score: ${profiles[2].score}`);
-    } else {
-        console.log("%cidk man", "color:purple");
+        console.log("%cStep 10", "color:yellow");
+        // 10
+        console.log("    END OF TURN: Checking for books...");
+        findBooks();
+
+        console.log("%cStep 11", "color:yellow");
+        // 11
+        console.log("    END OF TURN: Incrementing turns...");
+        turns++;
+
+        console.log("%cStep 12", "color:yellow");
+        // 12
+        if (stock.length + player0.length + player1.length + player2.length > 0) {
+            console.log("    END OF TURN: Cards are still in play...");
+        } else if (stock.length + player0.length + player1.length + player2.length == 0) {
+            console.log("    END OF TURN: There are no cards in play!!", "color:orange");
+        }
+
+        console.log("%cEND OF TURN\nAdvancing turn order...", "color:purple");
+        advanceProfiles();
     }
 }
 
+console.log("%cGAME INITIALIZED", "color:green");
 startGame();
