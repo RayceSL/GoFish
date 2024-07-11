@@ -78,7 +78,7 @@ var startingCardCount = 7;
 
 var getSecondTurn = false;
 
-var turns = 0;
+var turns = 1;
 
 // Swaps two cards' positions in an index
 // Took this guy's code: https://stackoverflow.com/a/2440720/25562183
@@ -133,20 +133,16 @@ function findBooks() {
 
         if (profiles[0].hand[0].value == profiles[0].hand[1].value) {
             matchesFound++;
-            //console.log(`Matches found: ${matchesFound}`);
 
             if (profiles[0].hand[0].value == profiles[0].hand[2].value) {
                 matchesFound++;
-                //console.log(`Matches found: ${matchesFound}`);
 
                 if (profiles[0].hand[0].value == profiles[0].hand[3].value) {
                     matchesFound++;
-                    //console.log(`Matches found: ${matchesFound}`);
 
                     if (matchesFound == 3) {
                         console.log("Book found!");
                         profiles[0].score++;
-                        console.log(`Score: ${profiles[0].score}`);
                         profiles[0].hand.shift();
                         profiles[0].hand.shift();
                         profiles[0].hand.shift();
@@ -186,35 +182,6 @@ function takeMatches(fromPlayer, toPlayer) {
     }
 }
 
-// Debugging purposes
-// Deals a book and some random cards to the first player
-/* 
-function win() {
-    var randomCardsAdded = 40;
-    console.log(`Dealing cards to ${profiles[0].name}...`);
-    
-    for (suit = 1; suit <= 4; suit++) {
-        // Each iteration, the array gets smaller---this compensates for that
-        //                    ____/\____
-        //                   /          \
-        deal((13 * suit - 1) - (suit - 1), stock, profiles[0].hand);
-    }
-
-    for (i = 0; i < randomCardsAdded; i++) {
-        dealRand(stock, profiles[0].hand);
-    }
-    console.log(`Dealt ${profiles[0].hand.length} cards to ${profiles[0].name}.`);
-    console.log("Their hand:");
-    profiles[0].hand.sort((a,b) => a.value - b.value);
-    console.log(profiles[0].hand);
-    console.log(`${profiles[0].name} looks for books...`);
-    findBooks();
-    console.log(`Found ${profiles[0].score} books!`);
-    console.log("Their hand:");
-    console.log(profiles[0].hand);
-}
- */
-
 // TASK I: Deals seven cards to each player
 function startGame() {
     console.log("%cStarted game!", "color:green");
@@ -225,50 +192,30 @@ function startGame() {
         advanceProfiles();
     }
     advanceProfiles();
-    console.log(`The play is passed to ${profiles[0].name}.\n`);
+    console.log(`The play is passed to ${profiles[0].name}.`);
+    console.log(`%cTurn: ${turns}`, "color:red");
     botTurn();
 }
 
 function nextTurn() {
     advanceProfiles();
-    console.log(`${profiles[0].name}'s hand: ${profiles[0].hand.length}`);
-    console.log(`${profiles[1].name}'s hand: ${profiles[1].hand.length}`);
-    console.log(`${profiles[2].name}'s hand: ${profiles[2].hand.length}\n`);
-    console.log(`Stock: ${stock.length}\n`);
-    
-    console.log(`Turn: ${turns}`);
+    console.log(`%cTurn: ${turns}`, "color:red");
     console.log(`Current player: ${profiles[0].name}.`);
-    turns++;
     botTurn();
 }
 
 function botTurn() {
-    // TASK 0: If hand is empty, go fish, then proceed
-    if (profiles[0].hand.length < 0) {
-        console.log(`${profiles[0].name} must start by going fishing...`);
-        if (stock.length < 1) {
-            console.log("The stock is empty");
-            return;
-        } else {
-            dealRand(stock, profiles[0].hand);
-        }
-    }
     // TASK I: Check for books
     profiles[0].hand.sort((a,b) => a.value - b.value);
     findBooks();
 
     // TASK II: Choose a random player
     var randProfileIndex = Math.floor(Math.random() * (profiles.length - 1) + 1);
-    // TASK II a: Check that the chosen player has at least 1 card
     if (profiles[1].hand.length + profiles[2].hand.length < 1) {
         console.log(`${profiles[0].name} can't play, no one else has any cards!`);
-        console.log(`${profiles[0].name}'s score: ${profiles[0].score}`);
-        console.log(`${profiles[1].name}'s score: ${profiles[1].score}`);
-        console.log(`${profiles[2].name}'s score: ${profiles[2].score}\n`);
-        return;
-        //return; // ??????
     } else if (profiles[randProfileIndex].hand.length < 1) {
         console.log(`${profiles[0].name} chose ${profiles[randProfileIndex].name}, but they have no cards.`);
+        console.log("So they try again!");
         botTurn();
     } else {
         console.log(`${profiles[0].name} chooses to take from: ${profiles[randProfileIndex].name}.`);
@@ -280,17 +227,19 @@ function botTurn() {
         console.log(`${profiles[0].name} must start by going fishing...`);
         if (stock.length < 1) {
             console.log("The stock is empty");
-            return;
+            console.log("%cENDPOINT C", "color:yellow");
+            //return;
         } else {
             dealRand(stock, profiles[0].hand);
         }
-    }
-    swapCard(profiles[0].hand, 0, (Math.floor(Math.random() * profiles[0].hand.length)));
-    console.log(`${profiles[0].name} wants ${profiles[0].hand[0].value}s.`);
+    } else {
+        swapCard(profiles[0].hand, 0, (Math.floor(Math.random() * profiles[0].hand.length)));
+        console.log(`${profiles[0].name} wants ${profiles[0].hand[0].value}s.`);
 
-    // TASK IV: Take all matching cards from the player
-    console.log(`${profiles[randProfileIndex].name} looks through their cards...`);
-    takeMatches(profiles[randProfileIndex], profiles[0]);
+        // TASK IV: Take all matching cards from the player
+        console.log(`${profiles[randProfileIndex].name} looks through their cards...`);
+        takeMatches(profiles[randProfileIndex], profiles[0]);
+    }
     
     // TASK V: If player got at least 1 match, they get to go again
     if (getSecondTurn == true) {
@@ -299,25 +248,36 @@ function botTurn() {
     } else {
         // GO FISH PROTOCOL
         console.log(`${profiles[0].name} goes fishing!`);
-
         if (stock.length < 1) {
             console.log(`${profiles[0].name} tried, but the stock is empty!`);
-            return;
+            console.log("%cENDPOINT B", "color:yellow");
         } else {
             dealRand(stock, profiles[0].hand);
+            console.log("%cENDPOINT A", "color:yellow");
         }
     }
 
     // TASK OMEGA: Check for books, pass turn
     profiles[0].hand.sort((a,b) => a.value - b.value);
-
-    console.log(`${profiles[0].name}'s score: ${profiles[0].score}`);
-    console.log(`${profiles[1].name}'s score: ${profiles[1].score}`);
-    console.log(`${profiles[2].name}'s score: ${profiles[2].score}\n`);
-
-    profiles[0].hand.sort((a,b) => a.value - b.value);
     findBooks();
-    nextTurn();
+    turns++;
+
+    // Only pass turn if someone has cards in their hand
+    if (stock.length + player0.length + player1.length + player2.length > 0) {
+        console.log("%cPASSES TURN", "color:blue");
+        console.log(`${profiles[0].name}'s hand: ${profiles[0].hand.length}`);
+        console.log(`${profiles[1].name}'s hand: ${profiles[1].hand.length}`);
+        console.log(`${profiles[2].name}'s hand: ${profiles[2].hand.length}`);
+        nextTurn();
+    } else if (stock.length + player0.length + player1.length + player2.length == 0) {
+        console.log("%cGAME ENDED", "color:orange");
+        console.log(`${profiles[0].name}'s score: ${profiles[0].score}`);
+        console.log(`${profiles[1].name}'s score: ${profiles[1].score}`);
+        console.log(`${profiles[2].name}'s score: ${profiles[2].score}`);
+        return;
+    } else {
+        console.log("%cidk man", "color:purple");
+    }
 }
 
 startGame();
