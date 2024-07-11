@@ -83,9 +83,11 @@ var startingCardCount = 7;
 
 var getSecondTurn = false;
 
-var turns = 0;
+var turns = 1;
 
 var skipRestOfTurn = false;
+
+var endGame = false;
 
 // Other functions
 // Swaps two cards' positions in an index
@@ -188,31 +190,33 @@ function takeMatches(fromPlayer, toPlayer) {
     console.log(" > takeMatches exited");
 }
 
-function startGame() {
-    console.log("%cStarted game!", "color:green");
-    console.log(`${profiles[0].name} is the dealer.\nThey deal ${startingCardCount} cards to everyone...`);
-    for (i = 1; i <= startingCardCount * profiles.length; i++) {
-        dealRand(stock, profiles[0].hand);
+function game() {
+    do {
+        console.log(`%cTurn: ${turns}`, "color:red");
+        console.log(`Current player: ${profiles[0].name}`);
+        botTurn();
+    
+        console.log(`\nCards in stock: ${stock.length}`);
+        console.log(`${profiles[0].name}'s hand: ${profiles[0].hand.length}`);
+        console.log(`${profiles[1].name}'s hand: ${profiles[1].hand.length}`);
+        console.log(`${profiles[2].name}'s hand: ${profiles[2].hand.length}`);
+    
+        console.log("%cEND OF TURN\n", "color:magenta");
+        getSecondTurn = false;
+        skipRestOfTurn = false;
         advanceProfiles();
+        turns++;
     }
-    console.log(`The play is passed to ${profiles[1].name}.`);
-    advanceProfiles();
-    botTurn();
-    while (stock.length + player0.length + player1.length + player2.length > 0) {
-        nextTurn();
-        i++;
-    }
-    console.log("hello :-)");
-}
+    while (player0.length + player1.length + player2.length + stock.length > 0)
 
-function nextTurn() {
-    console.log(`Current player: ${profiles[0].name}.`);
-    botTurn();
+    console.log("%cEND OF GAME: There are no cards in play!!", "color:red");
+    skipRestOfTurn = true;
+    console.log(`\n${profiles[0].name}'s score: ${profiles[0].score}`);
+    console.log(`${profiles[1].name}'s score: ${profiles[1].score}`);
+    console.log(`${profiles[2].name}'s score: ${profiles[2].score}`);
 }
 
 function botTurn() {
-    console.log(`%cTurn: ${turns}`, "color:red");
-
     console.log("%cStep 1", "color:yellow");
     // 1
     console.log("    Sorting hand...");
@@ -235,7 +239,6 @@ function botTurn() {
     } else if (profiles[randProfileIndex].hand.length < 1) {
         console.log("%c    The chosen player has no cards!", "color:orange");
         console.log("%c    SCENARIO A: Restarting turn...", "color:green");
-        skipRestOfTurn = true;
         botTurn();
     } else {
         console.log("    The other players have cards.");
@@ -253,7 +256,6 @@ function botTurn() {
             console.log(`    %c${profiles[0].name} draws from the stock...`);
             dealRand(stock, profiles[0].hand);
             console.log("%c    SCENARIO B: Restarting turn...", "color:green");
-            skipRestOfTurn = true;
             botTurn();
         }
     } else {
@@ -262,7 +264,7 @@ function botTurn() {
         // 6
         console.log("    Choosing a rank to pick...");
         swapCard(profiles[0].hand, 0, (Math.floor(Math.random() * profiles[0].hand.length)));
-        // console.log(`${profiles[0].name} wants ${profiles[0].hand[0].value}s.`);
+        console.log(`${profiles[0].name} wants ${profiles[0].hand[0].value}s.`);
 
         console.log("%cStep 7", "color:yellow");
         // 7
@@ -273,10 +275,8 @@ function botTurn() {
     console.log("%cStep 8", "color:yellow");
     // 8
     if (getSecondTurn == true) {
-        console.log("Second turn allowed;\ngetSecondTurn = false;");
         getSecondTurn = false;
         console.log("%c    SCENARIO C: Restarting turn...", "color:green");
-        skipRestOfTurn = true;
         botTurn();
     } else {
         console.log("%cGO FISH PROTOCOL", "color:blue");
@@ -287,48 +287,17 @@ function botTurn() {
             dealRand(stock, profiles[0].hand);
         }
     }
-
-    if (skipRestOfTurn == false && getSecondTurn == false) {
-        console.log("%cStep 9", "color:yellow");
-        // 9
-        console.log("%c    END OF TURN: Sorting hand...", "color:purple");
-        profiles[0].hand.sort((a,b) => a.value - b.value);
-
-        console.log("%cStep 10", "color:yellow");
-        // 10
-        console.log("%c    END OF TURN: Checking for books...", "color:purple");
-        findBooks();
-
-        console.log("%cStep 11", "color:yellow");
-        // 11
-        console.log("%c    END OF TURN: Incrementing turns...", "color:purple");
-        turns++;
-
-        console.log("%cStep 12", "color:yellow");
-        // 12
-        if (stock.length + player0.length + player1.length + player2.length > 0) {
-            console.log("%c    END OF TURN: Cards are still in play...", "color:purple");
-            console.log(`Cards in stock: ${stock.length}`);
-            console.log(`${profiles[0].name}'s hand: ${profiles[0].hand.length}`);
-            console.log(`${profiles[1].name}'s hand: ${profiles[1].hand.length}`);
-            console.log(`${profiles[2].name}'s hand: ${profiles[2].hand.length}`);
-
-        } else if (stock.length + player0.length + player1.length + player2.length == 0) {
-            console.log("%cEND OF GAME: There are no cards in play!!", "color:red");
-            skipRestOfTurn = true;
-            
-            console.log(`${profiles[0].name}'s score: ${profiles[0].score}`);
-            console.log(`${profiles[1].name}'s score: ${profiles[1].score}`);
-            console.log(`${profiles[2].name}'s score: ${profiles[2].score}`);
-        }
-
-        console.log("%cEND OF TURN\nAdvancing turn order...", "color:purple");
-        advanceProfiles();
-        console.log("%cPlay is passed on", "color:green");
-        //botTurn();
-    }
-    skipRestOfTurn = false;
 }
 
+
 console.log("%cGAME INITIALIZED", "color:green");
-startGame();
+console.log("%cStarted game!", "color:green");
+console.log(`${profiles[0].name} is the dealer.\nThey deal ${startingCardCount} cards to everyone...`);
+for (i = 1; i <= startingCardCount * profiles.length; i++) {
+    dealRand(stock, profiles[0].hand);
+    advanceProfiles();
+}
+console.log(`The play is passed to ${profiles[1].name}.`);
+advanceProfiles();
+
+game();
