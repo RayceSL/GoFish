@@ -217,7 +217,9 @@ function game() {
 
     }
     while (player0.length + player1.length + player2.length + stock.length > 0);
+
     console.log("%cGAME OVER!", "color:red");
+
 }
 
 function botTurn() {
@@ -261,7 +263,7 @@ function botTurn() {
             console.log(`%c${profiles[randProfileIndex].name} tells ${profiles[0].name} to GO FISH!`, "color:dodgerblue");
 
             if (stock.length < 1) {
-                console.log("%cBut the stock is empty!", "color:orange");
+                console.log("%cBut the stock is empty!", "color:dodgerblue");
 
             } else {
                 dealRand(stock, profiles[0].hand);
