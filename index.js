@@ -10,61 +10,61 @@
 // as their score, I'm just trusting Bicycle on this one
 // The two jokers are also removed
 var stock = [
-    {"name": "2♥",     "value": "2"    }, // index: 0
-    {"name": "3♥",     "value": "3"    }, // index: 1
-    {"name": "4♥",     "value": "4"    }, // index: 2
-    {"name": "5♥",     "value": "5"    }, // index: 3
-    {"name": "6♥",     "value": "6"    }, // index: 4
-    {"name": "7♥",     "value": "7"    }, // index: 5
-    {"name": "8♥",     "value": "8"    }, // index: 6
-    {"name": "9♥",     "value": "9"    }, // index: 7
-    {"name": "10♥",    "value": "10"   }, // index: 8
-    {"name": "J♥",     "value": "11"   }, // index: 9
-    {"name": "Q♥",     "value": "12"   }, // index: 10
-    {"name": "K♥",     "value": "13"   }, // index: 11
-    {"name": "A♥",     "value": "14"   }, // index: 12
+    {"name": "2♥",     "value": "2",    "pluralName": "Twos"   }, // index: 0
+    {"name": "3♥",     "value": "3",    "pluralName": "Threes" }, // index: 1
+    {"name": "4♥",     "value": "4",    "pluralName": "Fours"  }, // index: 2
+    {"name": "5♥",     "value": "5",    "pluralName": "Fives"  }, // index: 3
+    {"name": "6♥",     "value": "6",    "pluralName": "Sixes"  }, // index: 4
+    {"name": "7♥",     "value": "7",    "pluralName": "Sevens" }, // index: 5
+    {"name": "8♥",     "value": "8",    "pluralName": "Eights" }, // index: 6
+    {"name": "9♥",     "value": "9",    "pluralName": "Nines"  }, // index: 7
+    {"name": "10♥",    "value": "10",   "pluralName": "Tens"   }, // index: 8
+    {"name": "J♥",     "value": "11",   "pluralName": "Jacks"  }, // index: 9
+    {"name": "Q♥",     "value": "12",   "pluralName": "Queens" }, // index: 10
+    {"name": "K♥",     "value": "13",   "pluralName": "Kings"  }, // index: 11
+    {"name": "A♥",     "value": "14",   "pluralName": "Aces"   }, // index: 12
 
-    {"name": "2♣",     "value": "2"    }, // index: 13
-    {"name": "3♣",     "value": "3"    }, // index: 14
-    {"name": "4♣",     "value": "4"    }, // index: 15
-    {"name": "5♣",     "value": "5"    }, // index: 16
-    {"name": "6♣",     "value": "6"    }, // index: 17
-    {"name": "7♣",     "value": "7"    }, // index: 18
-    {"name": "8♣",     "value": "8"    }, // index: 19
-    {"name": "9♣",     "value": "9"    }, // index: 20
-    {"name": "10♣",    "value": "10"   }, // index: 21
-    {"name": "J♣",     "value": "11"   }, // index: 22
-    {"name": "Q♣",     "value": "12"   }, // index: 23
-    {"name": "K♣",     "value": "13"   }, // index: 24
-    {"name": "A♣",     "value": "14"   }, // index: 25
+    {"name": "2♣",     "value": "2",    "pluralName": "Twos"   }, // index: 13
+    {"name": "3♣",     "value": "3",    "pluralName": "Threes" }, // index: 14
+    {"name": "4♣",     "value": "4",    "pluralName": "Fours"  }, // index: 15
+    {"name": "5♣",     "value": "5",    "pluralName": "Fives"  }, // index: 16
+    {"name": "6♣",     "value": "6",    "pluralName": "Sixes"  }, // index: 17
+    {"name": "7♣",     "value": "7",    "pluralName": "Sevens" }, // index: 18
+    {"name": "8♣",     "value": "8",    "pluralName": "Eights" }, // index: 19
+    {"name": "9♣",     "value": "9",    "pluralName": "Nines"  }, // index: 20
+    {"name": "10♣",    "value": "10",   "pluralName": "Tens"   }, // index: 21
+    {"name": "J♣",     "value": "11",   "pluralName": "Jacks"  }, // index: 22
+    {"name": "Q♣",     "value": "12",   "pluralName": "Queens" }, // index: 23
+    {"name": "K♣",     "value": "13",   "pluralName": "Kings"  }, // index: 24
+    {"name": "A♣",     "value": "14",   "pluralName": "Aces"   }, // index: 25
 
-    {"name": "2♦",     "value": "2"    }, // index: 26
-    {"name": "3♦",     "value": "3"    }, // index: 27
-    {"name": "4♦",     "value": "4"    }, // index: 28
-    {"name": "5♦",     "value": "5"    }, // index: 29
-    {"name": "6♦",     "value": "6"    }, // index: 30
-    {"name": "7♦",     "value": "7"    }, // index: 31
-    {"name": "8♦",     "value": "8"    }, // index: 32
-    {"name": "9♦",     "value": "9"    }, // index: 33
-    {"name": "10♦",    "value": "10"   }, // index: 34
-    {"name": "J♦",     "value": "11"   }, // index: 35
-    {"name": "Q♦",     "value": "12"   }, // index: 36
-    {"name": "K♦",     "value": "13"   }, // index: 37
-    {"name": "A♦",     "value": "14"   }, // index: 38
+    {"name": "2♦",     "value": "2",    "pluralName": "Twos"   }, // index: 26
+    {"name": "3♦",     "value": "3",    "pluralName": "Threes" }, // index: 27
+    {"name": "4♦",     "value": "4",    "pluralName": "Fours"  }, // index: 28
+    {"name": "5♦",     "value": "5",    "pluralName": "Fives"  }, // index: 29
+    {"name": "6♦",     "value": "6",    "pluralName": "Sixes"  }, // index: 30
+    {"name": "7♦",     "value": "7",    "pluralName": "Sevens" }, // index: 31
+    {"name": "8♦",     "value": "8",    "pluralName": "Eights" }, // index: 32
+    {"name": "9♦",     "value": "9",    "pluralName": "Nines"  }, // index: 33
+    {"name": "10♦",    "value": "10",   "pluralName": "Tens"   }, // index: 34
+    {"name": "J♦",     "value": "11",   "pluralName": "Jacks"  }, // index: 35
+    {"name": "Q♦",     "value": "12",   "pluralName": "Queens" }, // index: 36
+    {"name": "K♦",     "value": "13",   "pluralName": "Kings"  }, // index: 37
+    {"name": "A♦",     "value": "14",   "pluralName": "Aces"   }, // index: 38
 
-    {"name": "2♠",     "value": "2"    }, // index: 39
-    {"name": "3♠",     "value": "3"    }, // index: 40
-    {"name": "4♠",     "value": "4"    }, // index: 41
-    {"name": "5♠",     "value": "5"    }, // index: 42
-    {"name": "6♠",     "value": "6"    }, // index: 43
-    {"name": "7♠",     "value": "7"    }, // index: 44
-    {"name": "8♠",     "value": "8"    }, // index: 45
-    {"name": "9♠",     "value": "9"    }, // index: 46
-    {"name": "10♠",    "value": "10"   }, // index: 47
-    {"name": "J♠",     "value": "11"   }, // index: 48
-    {"name": "Q♠",     "value": "12"   }, // index: 49
-    {"name": "K♠",     "value": "13"   }, // index: 50
-    {"name": "A♠",     "value": "14"   }  // index: 51
+    {"name": "2♠",     "value": "2",    "pluralName": "Twos"   }, // index: 39
+    {"name": "3♠",     "value": "3",    "pluralName": "Threes" }, // index: 40
+    {"name": "4♠",     "value": "4",    "pluralName": "Fours"  }, // index: 41
+    {"name": "5♠",     "value": "5",    "pluralName": "Fives"  }, // index: 42
+    {"name": "6♠",     "value": "6",    "pluralName": "Sixes"  }, // index: 43
+    {"name": "7♠",     "value": "7",    "pluralName": "Sevens" }, // index: 44
+    {"name": "8♠",     "value": "8",    "pluralName": "Eights" }, // index: 45
+    {"name": "9♠",     "value": "9",    "pluralName": "Nines"  }, // index: 46
+    {"name": "10♠",    "value": "10",   "pluralName": "Tens"   }, // index: 47
+    {"name": "J♠",     "value": "11",   "pluralName": "Jacks"  }, // index: 48
+    {"name": "Q♠",     "value": "12",   "pluralName": "Queens" }, // index: 49
+    {"name": "K♠",     "value": "13",   "pluralName": "Kings"  }, // index: 50
+    {"name": "A♠",     "value": "14",   "pluralName": "Aces"   }  // index: 51
 ];
 
 var player0 = [];
@@ -188,12 +188,16 @@ function takeMatches(fromPlayer, toPlayer) {
 function game() {
     console.log("%cStarted game!", "color:green");
     console.log(`${profiles[0].name} is the dealer.\nThey deal ${startingCardCount} cards to everyone...`);
+
     for (i = 1; i <= startingCardCount * profiles.length; i++) {
         dealRand(stock, profiles[0].hand);
         advanceProfiles();
+
     }
+
     console.log(`The play is passed to ${profiles[1].name}.\n\n`);
     advanceProfiles();
+
     do {
         console.log(`%cTurn: ${turns}`, "color:red");
         console.log(`Current player: ${profiles[0].name}`);
@@ -202,54 +206,74 @@ function game() {
         console.log(`    ${profiles[0].name}'s hand: ${profiles[0].hand.length} ... Points: ${profiles[0].score}`);
         console.log(`    ${profiles[1].name}'s hand: ${profiles[1].hand.length} ... Points: ${profiles[1].score}`);
         console.log(`    ${profiles[2].name}'s hand: ${profiles[2].hand.length} ... Points: ${profiles[2].score}\n\n`);
-        advanceProfiles();
-        turns++;
+
+        if (getSecondTurn == false) {
+            advanceProfiles();
+            turns++;
+
+        } else {
+            getSecondTurn = false;
+        }
+
     }
-    while (player0.length + player1.length + player2.length + stock.length > 0)
+    while (player0.length + player1.length + player2.length + stock.length > 0);
+    console.log("%cGAME OVER!", "color:red");
 }
 
 function botTurn() {
-    var skipTurn = false;
+    getSecondTurn = false;
     profiles[0].hand.sort((a,b) => a.value - b.value);
     findBooks();
     var randProfileIndex = Math.floor(Math.random() * (profiles.length - 1) + 1);
-    if (profiles[1].hand.length + profiles[2].hand.length < 1) {
-        console.log("%cThe other players have no cards!", "color:orange");
-    } else if (profiles[randProfileIndex].hand.length < 1) {
-        botTurn();
-    }
 
     if (profiles[0].hand.length < 1) {
         console.log(`%c${profiles[0].name} has an empty hand!!\nSo they must first draw from the stock...`, "color:orange");
+
         if (stock.length < 1) {
-            console.log("%cThe stock is empty!", "color:orange");
-            skipTurn = true;
+            console.log("%cBut the stock is empty!", "color:orange");
+
         } else {
             console.log(`%c${profiles[0].name} draws from the stock...`);
             dealRand(stock, profiles[0].hand);
-            botTurn();
+            askForMatches();
+
         }
+
+    } else if (profiles[1].hand.length + profiles[2].hand.length > 0) {
+        askForMatches();
+
     } else {
+        console.log("%cThe other players have no cards!", "color:orange");
+
+    }
+
+    function askForMatches() {
+        do {
+            randProfileIndex = Math.floor(Math.random() * (profiles.length - 1) + 1);
+        }
+        while (profiles[randProfileIndex].hand.length < 1);
+
         swapCard(profiles[0].hand, 0, (Math.floor(Math.random() * profiles[0].hand.length)));
-        console.log(`${profiles[0].name} asks ${profiles[randProfileIndex].name} for all their ${profiles[0].hand[0].value}s.`);
+        console.log(`${profiles[0].name} asks ${profiles[randProfileIndex].name} for all their ${profiles[0].hand[0].pluralName}.`);
         takeMatches(profiles[randProfileIndex], profiles[0]);
-    }
-    
-    if (skipTurn == false) {
-        if (getSecondTurn == true) {
-            getSecondTurn = false;
-            botTurn();
-        } else {
+        
+        if (getSecondTurn == false) {
+            console.log(`%c${profiles[randProfileIndex].name} tells ${profiles[0].name} to GO FISH!`, "color:dodgerblue");
+
             if (stock.length < 1) {
-                console.log(`%c${profiles[randProfileIndex].name} tells ${profiles[0].name} to GO FISH!\nbut the stock is empty!`, "color:blue");
+                console.log("%cBut the stock is empty!", "color:orange");
+
             } else {
-                console.log(`%c${profiles[randProfileIndex].name} tells ${profiles[0].name} to GO FISH!`, "color:blue");
                 dealRand(stock, profiles[0].hand);
+
             }
+
         }
-    } else {
-        console.log(`${profiles[0].name} passes.`);
+
     }
+
+    console.log(`${profiles[0].name} ends their turn.`);
+
 }
 
 game();
