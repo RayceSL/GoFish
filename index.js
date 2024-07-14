@@ -1,285 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Fish</title>
+</head>
+<body>
+    <h1>Go Fish 🎣</h1>
 
-//Global variables
-// I DO NOT KNOW WHY, BUT PLAYER'S HANDS
-// MUST BE SORTED BEFORE THE findBooks()
-// FUNCTION IS CALLED
-/**/
+    <h2>How To Play</h2>
 
-// The cards that will be used in the game
-// Aces are high, even though "Go Fish" counts the number of books a player has
-// as their score, I'm just trusting Bicycle on this one
-// The two jokers are also removed
-var stock = [
-    {"name": "2♥",     "value": "2",    "pluralName": "twos"   }, // index: 0
-    {"name": "3♥",     "value": "3",    "pluralName": "threes" }, // index: 1
-    {"name": "4♥",     "value": "4",    "pluralName": "fours"  }, // index: 2
-    {"name": "5♥",     "value": "5",    "pluralName": "fives"  }, // index: 3
-    {"name": "6♥",     "value": "6",    "pluralName": "sixes"  }, // index: 4
-    {"name": "7♥",     "value": "7",    "pluralName": "sevens" }, // index: 5
-    {"name": "8♥",     "value": "8",    "pluralName": "eights" }, // index: 6
-    {"name": "9♥",     "value": "9",    "pluralName": "nines"  }, // index: 7
-    {"name": "10♥",    "value": "10",   "pluralName": "tens"   }, // index: 8
-    {"name": "J♥",     "value": "11",   "pluralName": "jacks"  }, // index: 9
-    {"name": "Q♥",     "value": "12",   "pluralName": "queens" }, // index: 10
-    {"name": "K♥",     "value": "13",   "pluralName": "kings"  }, // index: 11
-    {"name": "A♥",     "value": "14",   "pluralName": "aces"   }, // index: 12
+    <ol>
+        <li>Shuffle a 52-card deck.</li>
+        <li>Each player draws a card from the deck, whoever draws the lowest rank (aces are high) will be the dealer.</li>
+        <li>The dealer then shuffles the deck, the player to their right cuts it, and then the dealer completes the cut.</li>
+        <li>Now the dealer will deal the appropriate ammount of cards to each player, one card at a time, face down, going clockwise around the table.</li>
+        <li>For two or three players: seven cards; for four or five players: five cards.</li>
+        <li>The remaining cards, now called "the stock," should be placed in the middle of the table, face down.</li>
+        <li>The first player clockwise to the dealer goes first, and play proceeds clockwise.</li>
+        <li>During a player's turn, they can ask any other player for all their cards of a certain rank, and the addressed player must give them. But, a player cannot ask for a rank that they don't already have.</li>
+        <li>If the chosen player has no matching cards, they say "go fish!" Then the current player takes a single card from the stock and ends their turn.</li>
+        <li>But, if they do recieve at least one card after asking, they can go again!</li>
+        <li>Once a player has four cards of the same rank, called a "book" or "four-of-a-kind," they take them out of their hand and place them in front of them, face up, on the table.</li>
+        <li>If a player starts their turn without any cards, they must first take a card from the stock, then they continue with their turn normally.</li>
+        <li>But, if the stock is empty, then they are out of the game and lose!</li>
+        <li>Once all the cards are matched up in books, whoever has the most books wins!</li>
+    </ol>
 
-    {"name": "2♣",     "value": "2",    "pluralName": "twos"   }, // index: 13
-    {"name": "3♣",     "value": "3",    "pluralName": "threes" }, // index: 14
-    {"name": "4♣",     "value": "4",    "pluralName": "fours"  }, // index: 15
-    {"name": "5♣",     "value": "5",    "pluralName": "fives"  }, // index: 16
-    {"name": "6♣",     "value": "6",    "pluralName": "sixes"  }, // index: 17
-    {"name": "7♣",     "value": "7",    "pluralName": "sevens" }, // index: 18
-    {"name": "8♣",     "value": "8",    "pluralName": "eights" }, // index: 19
-    {"name": "9♣",     "value": "9",    "pluralName": "nines"  }, // index: 20
-    {"name": "10♣",    "value": "10",   "pluralName": "tens"   }, // index: 21
-    {"name": "J♣",     "value": "11",   "pluralName": "jacks"  }, // index: 22
-    {"name": "Q♣",     "value": "12",   "pluralName": "queens" }, // index: 23
-    {"name": "K♣",     "value": "13",   "pluralName": "kings"  }, // index: 24
-    {"name": "A♣",     "value": "14",   "pluralName": "aces"   }, // index: 25
+    <form>
+        <h2>Game Set-Up</h2>
+        <label>Select how many opponents:</label><br>
 
-    {"name": "2♦",     "value": "2",    "pluralName": "twos"   }, // index: 26
-    {"name": "3♦",     "value": "3",    "pluralName": "threes" }, // index: 27
-    {"name": "4♦",     "value": "4",    "pluralName": "fours"  }, // index: 28
-    {"name": "5♦",     "value": "5",    "pluralName": "fives"  }, // index: 29
-    {"name": "6♦",     "value": "6",    "pluralName": "sixes"  }, // index: 30
-    {"name": "7♦",     "value": "7",    "pluralName": "sevens" }, // index: 31
-    {"name": "8♦",     "value": "8",    "pluralName": "eights" }, // index: 32
-    {"name": "9♦",     "value": "9",    "pluralName": "nines"  }, // index: 33
-    {"name": "10♦",    "value": "10",   "pluralName": "tens"   }, // index: 34
-    {"name": "J♦",     "value": "11",   "pluralName": "jacks"  }, // index: 35
-    {"name": "Q♦",     "value": "12",   "pluralName": "queens" }, // index: 36
-    {"name": "K♦",     "value": "13",   "pluralName": "kings"  }, // index: 37
-    {"name": "A♦",     "value": "14",   "pluralName": "aces"   }, // index: 38
+        <input type="radio" name="playerNum" id="1opp">
+        <label for="1opp">One opponent</label><br>
 
-    {"name": "2♠",     "value": "2",    "pluralName": "twos"   }, // index: 39
-    {"name": "3♠",     "value": "3",    "pluralName": "threes" }, // index: 40
-    {"name": "4♠",     "value": "4",    "pluralName": "fours"  }, // index: 41
-    {"name": "5♠",     "value": "5",    "pluralName": "fives"  }, // index: 42
-    {"name": "6♠",     "value": "6",    "pluralName": "sixes"  }, // index: 43
-    {"name": "7♠",     "value": "7",    "pluralName": "sevens" }, // index: 44
-    {"name": "8♠",     "value": "8",    "pluralName": "eights" }, // index: 45
-    {"name": "9♠",     "value": "9",    "pluralName": "nines"  }, // index: 46
-    {"name": "10♠",    "value": "10",   "pluralName": "tens"   }, // index: 47
-    {"name": "J♠",     "value": "11",   "pluralName": "jacks"  }, // index: 48
-    {"name": "Q♠",     "value": "12",   "pluralName": "queens" }, // index: 49
-    {"name": "K♠",     "value": "13",   "pluralName": "kings"  }, // index: 50
-    {"name": "A♠",     "value": "14",   "pluralName": "aces"   }  // index: 51
-];
+        <input type="radio" name="playerNum" id="2opp">
+        <label for="2opp">Two opponents</label><br>
 
-var player0 = [];
-var player1 = [];
-var player2 = [];
+        <input type="radio" name="playerNum" id="3opp">
+        <label for="3opp">Three opponents</label><br>
 
-var profiles = [
-    {"name": "Rayce",   "hand": player0,    "score": 0},
-    {"name": "Abby",    "hand": player1,    "score": 0},
-    {"name": "Bob",     "hand": player2,    "score": 0}
-];
+        <input type="radio" name="playerNum" id="4opp">
+        <label for="4opp">Four opponents</label><br>
 
-// 2--3 players: 7 cards
-// 4--5 players: 5 cards
-var startingCardCount = 7;
 
-var getSecondTurn = false;
+        <br>
+        <label>Select difficulty:</label><br>
 
-var turns = 1;
+        <input type="radio" name="difficulty" id="easy">
+        <label for="easy">Easy</label><br>
 
-// Swaps two cards' positions in an index
-// Took this guy's code: https://stackoverflow.com/a/2440720/25562183
-function swapCard(array, indexA, indexB) {
-    let tmp = array[indexA];
-    array[indexA] = array[indexB];
-    array[indexB] = tmp;
-}
+        <input type="radio" name="difficulty" id="medium">
+        <label for="medium">Medium</label><br>
 
-// Deals a random card from one player to another to the BOTTOM of their hand
-// (end of their array)
-function dealRand(fromPlayer, toPlayer) {
-    let randIndex = (Math.floor(Math.random() * fromPlayer.length));
-    swapCard(fromPlayer, randIndex, 0);
-    toPlayer.push(fromPlayer[0]);
-    fromPlayer.shift();
-}
+        <input type="radio" name="difficulty" id="hard">
+        <label for="hard">Hard</label><br>
 
-// Deals a specific card from one player to another to the BOTTOM of their hand
-// (end of their array)
-function deal(index, fromPlayer, toPlayer) {
-    swapCard(fromPlayer, index, 0);
-    toPlayer.push(fromPlayer[0]);
-    fromPlayer.shift();
-}
 
-function advanceProfiles() {
-    profiles.push(profiles[0]);
-    profiles.shift();
-}
+        <br>
+        <input type="submit">
 
-// remember to format as profiles[x].hand
-function advanceHand(player) {
-    player.push(player[0]);
-    player.shift();
-}
+    </form>
 
-// locates fours-of-a-kind (called "books") in the current player's hand,
-// Adds a point to the player's score
-function findBooks() {
-    profiles[0].hand.sort((a,b) => a.value - b.value);
-    var extraTurn = false;
-    var matchesFound = 0;
-    let i = 0;
-    while (i < 51 && profiles[0].hand.length >= 4) {
-
-        if (profiles[0].hand[0].value == profiles[0].hand[1].value) {
-            matchesFound++;
-
-            if (profiles[0].hand[0].value == profiles[0].hand[2].value) {
-                matchesFound++;
-
-                if (profiles[0].hand[0].value == profiles[0].hand[3].value) {
-                    matchesFound++;
-
-                    if (matchesFound == 3) {
-                        console.log(`%cBook found!\n${profiles[0].name} gets a point!`, "color:yellow");
-                        profiles[0].score++;
-                        profiles[0].hand.shift();
-                        profiles[0].hand.shift();
-                        profiles[0].hand.shift();
-                        profiles[0].hand.shift();
-                        matchesFound = 0;
-                    }
-                } else {
-                    matchesFound = 0;
-                    advanceHand(profiles[0].hand);
-                    i++;
-                }
-            } else {
-                matchesFound = 0;
-                advanceHand(profiles[0].hand);
-                i++;
-            }
-        } else {
-            matchesFound = 0;
-            advanceHand(profiles[0].hand);
-            i++;
-        }
-    }
-}
-
-// takeMatches(profiles[randProfileIndex], profiles[0]);
-function takeMatches(fromPlayer, toPlayer) {
-    let i = 0;
-
-    while (i < 51 && fromPlayer.hand.length >= 1) {
-        
-        if (toPlayer.hand[0].value == fromPlayer.hand[0].value) {
-            deal(0, fromPlayer.hand, toPlayer.hand);
-            console.log(`${fromPlayer.name} gave ${toPlayer.name} the ${toPlayer.hand[(toPlayer.hand.length)-1].name}.`);
-            getSecondTurn = true;
-
-        } else {
-            advanceHand(fromPlayer.hand);
-            i++;
-
-        }
-
-    }
-
-}
-
-function game() {
-    console.log("%cStarted game!", "color:green");
-    console.log(`${profiles[0].name} is the dealer.\nThey deal ${startingCardCount} cards to everyone...`);
-
-    for (i = 1; i <= startingCardCount * profiles.length; i++) {
-        dealRand(stock, profiles[0].hand);
-        advanceProfiles();
-
-    }
-
-    console.log(`The play is passed to ${profiles[1].name}.\n\n`);
-    advanceProfiles();
-
-    do {
-        if (getSecondTurn == false) {
-            console.log(`%cTurn: ${turns}`, "color:red");
-            console.log(`Current player: ${profiles[0].name}`);
-        } else {
-            getSecondTurn = false;
-        }
-
-        botTurn();
-
-        if (getSecondTurn == false) {
-            console.log(`\n    Cards in stock: ${stock.length}`);
-            console.log(`    ${profiles[0].name}'s hand: ${profiles[0].hand.length} ... Points: ${profiles[0].score}`);
-            console.log(`    ${profiles[1].name}'s hand: ${profiles[1].hand.length} ... Points: ${profiles[1].score}`);
-            console.log(`    ${profiles[2].name}'s hand: ${profiles[2].hand.length} ... Points: ${profiles[2].score}\n\n`);
-            advanceProfiles();
-            turns++;
-
-        }
-
-    }
-    while (player0.length + player1.length + player2.length + stock.length > 0);
-
-    console.log("%cGAME OVER!", "color:red");
-
-}
-
-function botTurn() {
-    getSecondTurn = false;
-    profiles[0].hand.sort((a,b) => a.value - b.value);
-    findBooks();
-    var randProfileIndex = Math.floor(Math.random() * (profiles.length - 1) + 1);
-
-    if (profiles[0].hand.length < 1) {
-        console.log(`%c${profiles[0].name} has an empty hand!!\nSo they must first draw from the stock...`, "color:orange");
-
-        if (stock.length < 1) {
-            console.log(`%cBut the stock is empty!\n${profiles[0].name} ends their turn.`, "color:orange");
-
-        } else {
-            console.log(`%c${profiles[0].name} draws from the stock...`, "color:orange");
-            dealRand(stock, profiles[0].hand);
-            askForMatches();
-
-        }
-
-    } else if (profiles[1].hand.length + profiles[2].hand.length > 0) {
-        askForMatches();
-
-    } else {
-        console.log(`%cThe other players have no cards! ${profiles[0].name} ends their turn.`, "color:orange");
-
-    }
-
-    function askForMatches() {
-        do {
-            randProfileIndex = Math.floor(Math.random() * (profiles.length - 1) + 1);
-        }
-        while (profiles[randProfileIndex].hand.length < 1);
-
-        swapCard(profiles[0].hand, 0, (Math.floor(Math.random() * profiles[0].hand.length)));
-        console.log(`${profiles[0].name} asks ${profiles[randProfileIndex].name} for all their ${profiles[0].hand[0].pluralName}.`);
-        takeMatches(profiles[randProfileIndex], profiles[0]);
-        
-        if (getSecondTurn == false) {
-            console.log(`%c${profiles[randProfileIndex].name} tells ${profiles[0].name} to GO FISH!`, "color:dodgerblue");
-
-            if (stock.length < 1) {
-                console.log(`%cBut the stock is empty!\n${profiles[0].name} ends their turn.`, "color:dodgerblue");
-
-            } else {
-                console.log(`%c${profiles[0].name} draws from the stock...`, "color:dodgerblue");
-                dealRand(stock, profiles[0].hand);
-
-            }
-
-        }
-
-    }
-
-}
-
-game();
+    <script src="full_deck.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
