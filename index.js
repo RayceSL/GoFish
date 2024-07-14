@@ -1,71 +1,9 @@
 
-//Global variables
 // I DO NOT KNOW WHY, BUT PLAYER'S HANDS
 // MUST BE SORTED BEFORE THE findBooks()
 // FUNCTION IS CALLED
-/**/
 
-// The cards that will be used in the game
-// Aces are high, even though "Go Fish" counts the number of books a player has
-// as their score, I'm just trusting Bicycle on this one
-// The two jokers are also removed
-var stock = [
-    {"name": "2♥",     "value": "2",    "pluralName": "twos"   }, // index: 0
-    {"name": "3♥",     "value": "3",    "pluralName": "threes" }, // index: 1
-    {"name": "4♥",     "value": "4",    "pluralName": "fours"  }, // index: 2
-    {"name": "5♥",     "value": "5",    "pluralName": "fives"  }, // index: 3
-    {"name": "6♥",     "value": "6",    "pluralName": "sixes"  }, // index: 4
-    {"name": "7♥",     "value": "7",    "pluralName": "sevens" }, // index: 5
-    {"name": "8♥",     "value": "8",    "pluralName": "eights" }, // index: 6
-    {"name": "9♥",     "value": "9",    "pluralName": "nines"  }, // index: 7
-    {"name": "10♥",    "value": "10",   "pluralName": "tens"   }, // index: 8
-    {"name": "J♥",     "value": "11",   "pluralName": "jacks"  }, // index: 9
-    {"name": "Q♥",     "value": "12",   "pluralName": "queens" }, // index: 10
-    {"name": "K♥",     "value": "13",   "pluralName": "kings"  }, // index: 11
-    {"name": "A♥",     "value": "14",   "pluralName": "aces"   }, // index: 12
-
-    {"name": "2♣",     "value": "2",    "pluralName": "twos"   }, // index: 13
-    {"name": "3♣",     "value": "3",    "pluralName": "threes" }, // index: 14
-    {"name": "4♣",     "value": "4",    "pluralName": "fours"  }, // index: 15
-    {"name": "5♣",     "value": "5",    "pluralName": "fives"  }, // index: 16
-    {"name": "6♣",     "value": "6",    "pluralName": "sixes"  }, // index: 17
-    {"name": "7♣",     "value": "7",    "pluralName": "sevens" }, // index: 18
-    {"name": "8♣",     "value": "8",    "pluralName": "eights" }, // index: 19
-    {"name": "9♣",     "value": "9",    "pluralName": "nines"  }, // index: 20
-    {"name": "10♣",    "value": "10",   "pluralName": "tens"   }, // index: 21
-    {"name": "J♣",     "value": "11",   "pluralName": "jacks"  }, // index: 22
-    {"name": "Q♣",     "value": "12",   "pluralName": "queens" }, // index: 23
-    {"name": "K♣",     "value": "13",   "pluralName": "kings"  }, // index: 24
-    {"name": "A♣",     "value": "14",   "pluralName": "aces"   }, // index: 25
-
-    {"name": "2♦",     "value": "2",    "pluralName": "twos"   }, // index: 26
-    {"name": "3♦",     "value": "3",    "pluralName": "threes" }, // index: 27
-    {"name": "4♦",     "value": "4",    "pluralName": "fours"  }, // index: 28
-    {"name": "5♦",     "value": "5",    "pluralName": "fives"  }, // index: 29
-    {"name": "6♦",     "value": "6",    "pluralName": "sixes"  }, // index: 30
-    {"name": "7♦",     "value": "7",    "pluralName": "sevens" }, // index: 31
-    {"name": "8♦",     "value": "8",    "pluralName": "eights" }, // index: 32
-    {"name": "9♦",     "value": "9",    "pluralName": "nines"  }, // index: 33
-    {"name": "10♦",    "value": "10",   "pluralName": "tens"   }, // index: 34
-    {"name": "J♦",     "value": "11",   "pluralName": "jacks"  }, // index: 35
-    {"name": "Q♦",     "value": "12",   "pluralName": "queens" }, // index: 36
-    {"name": "K♦",     "value": "13",   "pluralName": "kings"  }, // index: 37
-    {"name": "A♦",     "value": "14",   "pluralName": "aces"   }, // index: 38
-
-    {"name": "2♠",     "value": "2",    "pluralName": "twos"   }, // index: 39
-    {"name": "3♠",     "value": "3",    "pluralName": "threes" }, // index: 40
-    {"name": "4♠",     "value": "4",    "pluralName": "fours"  }, // index: 41
-    {"name": "5♠",     "value": "5",    "pluralName": "fives"  }, // index: 42
-    {"name": "6♠",     "value": "6",    "pluralName": "sixes"  }, // index: 43
-    {"name": "7♠",     "value": "7",    "pluralName": "sevens" }, // index: 44
-    {"name": "8♠",     "value": "8",    "pluralName": "eights" }, // index: 45
-    {"name": "9♠",     "value": "9",    "pluralName": "nines"  }, // index: 46
-    {"name": "10♠",    "value": "10",   "pluralName": "tens"   }, // index: 47
-    {"name": "J♠",     "value": "11",   "pluralName": "jacks"  }, // index: 48
-    {"name": "Q♠",     "value": "12",   "pluralName": "queens" }, // index: 49
-    {"name": "K♠",     "value": "13",   "pluralName": "kings"  }, // index: 50
-    {"name": "A♠",     "value": "14",   "pluralName": "aces"   }  // index: 51
-];
+var stock = deck.slice(2, 54);
 
 var player0 = [];
 var player1 = [];
@@ -124,19 +62,18 @@ function advanceHand(player) {
 // locates fours-of-a-kind (called "books") in the current player's hand,
 // Adds a point to the player's score
 function findBooks() {
-    profiles[0].hand.sort((a,b) => a.value - b.value);
-    var extraTurn = false;
+    profiles[0].hand.sort((a,b) => a.rankNum - b.rankNum);
     var matchesFound = 0;
     let i = 0;
     while (i < 51 && profiles[0].hand.length >= 4) {
 
-        if (profiles[0].hand[0].value == profiles[0].hand[1].value) {
+        if (profiles[0].hand[0].rankNum == profiles[0].hand[1].rankNum) {
             matchesFound++;
 
-            if (profiles[0].hand[0].value == profiles[0].hand[2].value) {
+            if (profiles[0].hand[0].rankNum == profiles[0].hand[2].rankNum) {
                 matchesFound++;
 
-                if (profiles[0].hand[0].value == profiles[0].hand[3].value) {
+                if (profiles[0].hand[0].rankNum == profiles[0].hand[3].rankNum) {
                     matchesFound++;
 
                     if (matchesFound == 3) {
@@ -172,9 +109,9 @@ function takeMatches(fromPlayer, toPlayer) {
 
     while (i < 51 && fromPlayer.hand.length >= 1) {
         
-        if (toPlayer.hand[0].value == fromPlayer.hand[0].value) {
+        if (toPlayer.hand[0].rankNum == fromPlayer.hand[0].rankNum) {
             deal(0, fromPlayer.hand, toPlayer.hand);
-            console.log(`${fromPlayer.name} gave ${toPlayer.name} the ${toPlayer.hand[(toPlayer.hand.length)-1].name}.`);
+            console.log(`${fromPlayer.name} gave ${toPlayer.name} the ${toPlayer.hand[(toPlayer.hand.length)-1].rankSH + toPlayer.hand[(toPlayer.hand.length)-1].suitSymbol}.`);
             getSecondTurn = true;
 
         } else {
@@ -202,19 +139,31 @@ function game() {
 
     do {
         if (getSecondTurn == false) {
-            console.log(`%cTurn: ${turns}`, "color:red");
+            console.log(`\n%cTurn: ${turns}`, "color:red");
             console.log(`Current player: ${profiles[0].name}`);
+
         } else {
             getSecondTurn = false;
+
         }
 
-        botTurn();
+        if (profiles[0].name == "Rayce") {
+            //console.log("HUMAN'S TURN NOW");
+            botTurn();
+
+        } else {
+            botTurn();
+
+        }
 
         if (getSecondTurn == false) {
             console.log(`\n    Cards in stock: ${stock.length}`);
-            console.log(`    ${profiles[0].name}'s hand: ${profiles[0].hand.length} ... Points: ${profiles[0].score}`);
-            console.log(`    ${profiles[1].name}'s hand: ${profiles[1].hand.length} ... Points: ${profiles[1].score}`);
-            console.log(`    ${profiles[2].name}'s hand: ${profiles[2].hand.length} ... Points: ${profiles[2].score}\n\n`);
+
+            for (i = 0; i < profiles.length; i++) {
+                console.log(`    ${profiles[i].name}'s hand: ${profiles[i].hand.length} ... Points: ${profiles[i].score}`);
+
+            }
+
             advanceProfiles();
             turns++;
 
@@ -257,11 +206,12 @@ function botTurn() {
     function askForMatches() {
         do {
             randProfileIndex = Math.floor(Math.random() * (profiles.length - 1) + 1);
+
         }
         while (profiles[randProfileIndex].hand.length < 1);
 
         swapCard(profiles[0].hand, 0, (Math.floor(Math.random() * profiles[0].hand.length)));
-        console.log(`${profiles[0].name} asks ${profiles[randProfileIndex].name} for all their ${profiles[0].hand[0].pluralName}.`);
+        console.log(`${profiles[0].name} asks ${profiles[randProfileIndex].name} for all their ${profiles[0].hand[0].rankPlural}.`);
         takeMatches(profiles[randProfileIndex], profiles[0]);
         
         if (getSecondTurn == false) {
