@@ -229,7 +229,7 @@ function humanTurn() {
             console.log("%cBut the stock is empty, so your turn is skipped...", "color:orange")
         } else {
             stock.dealRand(me);
-            console.log(`You drew the ${me.hand[me.hand.length].rankSH + me.hand[me.hand.length].suitSymbol}`, "color:orange");
+            console.log(`You drew the ${me.hand[me.hand.length-1].rankSH + me.hand[me.hand.length-1].suitSymbol}`, "color:orange");
         }
 
     } else if (discard.hand.length < 52) {
