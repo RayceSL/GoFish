@@ -40,7 +40,7 @@ class Player {
                         matchesFound++;
 
                         if (matchesFound == 3) {
-                            console.log(`%cBook found!\n${this.name} gets a point!`, "color:yellow");
+                            console.log(`%cBook found!\n${this.name} gets a point!`, "color:lime");
                             this.books++;
                             this.deal(discard, 0);
                             this.deal(discard, 0);
@@ -70,8 +70,7 @@ class Player {
         for (i = 0; i < this.hand.length; i++) {
             if (this.hand[0].rankNum == to.hand[0].rankNum) {
                 this.deal(to, 0);
-                // console.log(`${this.name} gave ${turnOrder[0].name} a card!`);
-                console.log(`%c${this.name} gave ${to.name} the ${to.hand[to.hand.length-1].rankSH + to.hand[to.hand.length-1].suitSymbol}`, "color:yellow");
+                console.log(`%c${this.name} gave ${to.name} the ${to.hand[to.hand.length-1].rankSH + to.hand[to.hand.length-1].suitSymbol}`, "color:lime");
                 getSecondTurn = true;
             } else {
                 advanceHand(this.hand);
@@ -80,11 +79,13 @@ class Player {
     }
 }
 
-// const noOfOpps = 1;
-var input = prompt("How many opponents?");
-var noOfOpps = parseInt(input);
+var _noOfOpps = prompt("How many opponents?");
+var noOfOpps = parseInt(_noOfOpps);
+
+var urName = prompt("What's your name?");
+
 var stock = new Player("Stock", deck.slice(2, 54));
-var me = new Player("Rayce");
+var me = new Player(urName);
 var abby = new Player("Abby");
 var bob = new Player("Bob");
 var cathy = new Player("Cathy");
@@ -123,41 +124,52 @@ function advanceHand(player) {
     player.shift();
 }
 
-function advanceProfiles() {
+function advanceTurnOrder() {
     turnOrder.push(turnOrder[0]);
     turnOrder.shift();
 }
 
 function game() {
-    console.log("%cStarted game!", "color:green");
-    console.log(`${turnOrder[0].name} is the dealer.\nThey deal ${startingHandLen} cards to everyone...`);
+    console.log("%cStarted game!", "color:lime");
+    console.log(`${me.name} is the dealer.\nThey deal ${startingHandLen} cards to everyone...`);
     for (i = 1; i <= startingHandLen * turnOrder.length; i++) {
         stock.dealRand(turnOrder[0]);
-        advanceProfiles();
+        advanceTurnOrder();
     }
 
     console.log(`The play is passed to ${turnOrder[1].name}.\n`);
-    advanceProfiles();
+    advanceTurnOrder();
 
     do {
         if (getSecondTurn == false) {
-            console.log(`\n%cTurn: ${turns}`, "color:red");
+            console.log(`%c\nTurn: ${turns}`, "color:red");
             console.log(`Current player: ${turnOrder[0].name}`);
         } else {
             getSecondTurn = false;
         }
-        botTurn();
+
+        switch (turnOrder[0].name) {
+            case urName:
+                humanTurn();
+                break;
+            default:
+                botTurn();
+        }
+
         if (getSecondTurn == false) {
             console.log(`\n    Cards in stock: ${stock.hand.length}`);
             for (i = 0; i < turnOrder.length; i++) {
                 console.log(`    ${turnOrder[i].name}'s hand: ${turnOrder[i].hand.length} cards ... Books: ${turnOrder[i].books}`);
             }
-            advanceProfiles();
+            advanceTurnOrder();
             turns++;
         }
     }
     while (discard.hand.length < 52);
-    console.log("%cGAME OVER!", "color:red");
+
+    // Took this other guys' code: https://stackoverflow.com/a/36941425/25562183
+    let winner = turnOrder.reduce((max, player) => max.books > player.books ? max : player);
+    console.log(`%cWinner: ${winner.name}!`, "color:lime");
 }
 
 function botTurn() {
@@ -190,7 +202,7 @@ function botTurn() {
         while (turnOrder[otherPlayer].hand.length < 1);
 
         turnOrder[0].swapCard(0, (Math.floor(Math.random() * turnOrder[0].hand.length)))
-        console.log(`${turnOrder[0].name} asks ${turnOrder[otherPlayer].name} for all their ${turnOrder[0].hand[0].rankPlural}.`);
+        console.log(`%c${turnOrder[0].name} asks ${turnOrder[otherPlayer].name} for all their ${turnOrder[0].hand[0].rankPlural}.`, "color:yellow");
         turnOrder[otherPlayer].giveMatches(turnOrder[0]);
 
         if (getSecondTurn == false) {
@@ -201,6 +213,69 @@ function botTurn() {
             } else {
                 console.log(`%c${turnOrder[0].name} draws from the stock...`, "color:dodgerblue");
                 stock.dealRand(turnOrder[0]);
+            }
+        }
+    }
+}
+
+function humanTurn() {
+    getSecondTurn = false;
+    me.findBooks();
+    
+    if (me.hand.length < 1) {
+        console.log("%cYour hand is empty, start your turn by drawing from the stock.", "color:orange");
+
+        if (stock.hand.length < 1) {
+            console.log("%cBut the stock is empty, so your turn is skipped...", "color:orange")
+        } else {
+            stock.dealRand(me);
+            console.log(`You drew the ${me.hand[me.hand.length].rankSH + me.hand[me.hand.length].suitSymbol}`, "color:orange");
+        }
+
+    } else if (discard.hand.length < 52) {
+        displayHand = [];
+        for (i = 0; i < me.hand.length; i++) {
+            displayHand.push(me.hand[i].rankSH);
+        }
+        console.log("%cYour hand:", "color:magenta");
+        console.log(displayHand.join(", "));
+        
+        askForMatches();
+    }
+
+    function askForMatches() {
+        for (i = 1; i < turnOrder.length; i++) {
+            console.log(`%cType ${i} to choose ${turnOrder[i].name}`, "color:magenta");
+        }
+    
+        var _otherPlayer = prompt("Who do you want to take cards from?");
+
+        var otherPlayer = parseInt(_otherPlayer);
+        console.log(`%cYou chose: ${turnOrder[otherPlayer].name}`, "color:magenta");
+
+        for (i = 0; i < me.hand.length; i++) {
+            console.log("Type '" + i + "' for:" + me.hand[i].rankPlural);
+        }
+
+        let _chosenRank = prompt("What rank do you want?");
+        chosenRank = parseInt(_chosenRank);
+
+        if (chosenRank > me.hand.length - 1) {
+            console.log("%cInvalid", "color:orange");
+        } else {
+            me.swapCard(0, chosenRank)
+            console.log(`%cYou ask ${turnOrder[otherPlayer].name} for all their ${me.hand[0].rankPlural}.`, "color:yellow");
+            turnOrder[otherPlayer].giveMatches(me);
+    
+            if (getSecondTurn == false) {
+                console.log(`%c${turnOrder[otherPlayer].name} tells you to GO FISH!`, "color:dodgerblue");
+    
+                if (stock.hand.length < 1) {
+                    console.log(`%cBut the stock is empty!\nYou end your turn.`, "color:dodgerblue");
+                } else {
+                    stock.dealRand(me);
+                    console.log(`%cYou drew the ${me.hand[me.hand.length-1].rankSH + me.hand[me.hand.length-1].suitSymbol}`, "color:dodgerblue");
+                }
             }
         }
     }
