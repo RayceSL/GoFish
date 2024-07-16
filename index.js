@@ -1,3 +1,25 @@
+#!/usr/bin/env node
+
+import chalk from "chalk";
+// console.log(chalk.bgGreen("TEXT GO HERE"));
+import {createSpinner} from "nanospinner";
+
+
+const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
+
+var urName;
+
+async function welcome() {
+    console.log(chalk.red.bold.italic.bgGreen("ME ME BIG BOY"));
+}
+
+await welcome()
+
+
+
+
+
+
 function main() {
     class Player {
         constructor(name = "Steve", hand = [], books = 0) {
@@ -303,5 +325,5 @@ function main() {
         }
     }
     
-    game();   
+    game();
 }
